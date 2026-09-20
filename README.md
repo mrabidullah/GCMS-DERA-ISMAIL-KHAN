@@ -252,21 +252,13 @@ Contributions are welcome. If you'd like to help:
 
 For larger changes, open an issue first to discuss the approach.
 
-## License
-
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details. In short: you're free to use, modify, and distribute this code, including commercially, as long as the original license and copyright notice are kept.
-
-*(If MIT isn't the license you actually want, swap this section and the `LICENSE` file for the correct one — e.g. GPL-3.0 or All Rights Reserved.)*
-
 ## Contact
 
-Maintained by **[Your Name / GCMS Dev Team]**.
 
-- Email: your-email@example.com
-- GitHub: [@your-username](https://github.com/your-username)
+- Email:mrabidullah37@gmail.com
+
 - Institution: Government College of Management Sciences, Dera Ismail Khan
 
-Questions, bug reports, and feature requests are best filed as [GitHub Issues](../../issues).
 
 ---
 
