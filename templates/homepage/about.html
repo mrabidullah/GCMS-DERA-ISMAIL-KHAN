@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Page Hero -->
+<div class="gradient-navy py-16 text-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-3">About GCMS</h1>
+      <p class="text-gray-300 text-lg">Government College of Management Sciences, Dera Ismail Khan</p>
+      <nav class="flex items-center justify-center gap-2 text-sm mt-4 text-gray-400">
+        <a href="{% url 'home' %}" class="hover:text-yellow-300 transition">Home</a>
+        <i class="fas fa-chevron-right text-xs"></i>
+        <span class="text-yellow-300">About</span>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 py-16">
+  <div class="grid lg:grid-cols-2 gap-12 items-center mb-16">
+    <div>
+      <div class="inline-flex items-center gap-2 text-navy-700 text-sm font-semibold uppercase tracking-widest mb-4"><span class="w-8 h-0.5 bg-yellow-400"></span> Our Story</div>
+      <h2 class="text-3xl font-bold text-navy-800 mb-6">A Legacy of Academic Excellence</h2>
+      <div class="section-divider mb-6"></div>
+      <div class="prose prose-gray max-w-none text-gray-600 leading-relaxed space-y-4">
+        <p>Government College of Management Sciences (GCMS) Dera Ismail Khan is a premier public sector institution committed to providing quality education in management sciences, commerce, and related disciplines. Established under the auspices of the Government of Khyber Pakhtunkhwa, GCMS has been a cornerstone of higher education in the D.I. Khan region.</p>
+        <p>Our institution takes pride in its diverse academic offerings, highly qualified faculty, and commitment to producing well-rounded graduates who are equipped to excel in today's competitive professional landscape. GCMS has consistently maintained high academic standards while nurturing an environment that fosters critical thinking, leadership, and ethical values.</p>
+        <p>With state-of-the-art facilities, dedicated faculty, and a vibrant campus culture, GCMS continues to shape the future leaders of Pakistan's business and management sector.</p>
+      </div>
+    </div>
+    <div class="relative">
+      <div class="bg-gradient-to-br from-navy-50 to-navy-100 rounded-3xl p-8">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-white rounded-2xl p-5 text-center shadow-sm">
+            <div class="text-3xl font-bold text-navy-700 mb-1">30+</div>
+            <div class="text-gray-500 text-sm">Years of Excellence</div>
+          </div>
+          <div class="bg-white rounded-2xl p-5 text-center shadow-sm">
+            <div class="text-3xl font-bold text-yellow-600 mb-1">2000+</div>
+            <div class="text-gray-500 text-sm">Students</div>
+          </div>
+          <div class="bg-white rounded-2xl p-5 text-center shadow-sm">
+            <div class="text-3xl font-bold text-navy-700 mb-1">50+</div>
+            <div class="text-gray-500 text-sm">Faculty Members</div>
+          </div>
+          <div class="bg-white rounded-2xl p-5 text-center shadow-sm">
+            <div class="text-3xl font-bold text-yellow-600 mb-1">8+</div>
+            <div class="text-gray-500 text-sm">Departments</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mission Vision Values -->
+  <div class="grid md:grid-cols-3 gap-8 mb-16">
+    <div class="bg-white rounded-2xl p-8 shadow-md border-t-4 border-navy-700 text-center">
+      <div class="w-16 h-16 gradient-navy rounded-full flex items-center justify-center mx-auto mb-5">
+        <i class="fas fa-bullseye text-white text-2xl"></i>
+      </div>
+      <h3 class="text-xl font-bold text-navy-800 mb-3">Our Mission</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">To provide affordable, quality education in management sciences, fostering critical thinking and professional competence in our graduates to meet local and national socioeconomic needs.</p>
+    </div>
+    <div class="bg-white rounded-2xl p-8 shadow-md border-t-4 border-yellow-400 text-center">
+      <div class="w-16 h-16 gradient-gold rounded-full flex items-center justify-center mx-auto mb-5">
+        <i class="fas fa-eye text-navy-900 text-2xl"></i>
+      </div>
+      <h3 class="text-xl font-bold text-navy-800 mb-3">Our Vision</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">To be the premier institution of management sciences in Khyber Pakhtunkhwa, producing transformative leaders who contribute positively to society and drive national development.</p>
+    </div>
+    <div class="bg-white rounded-2xl p-8 shadow-md border-t-4 border-navy-400 text-center">
+      <div class="w-16 h-16 bg-navy-100 rounded-full flex items-center justify-center mx-auto mb-5">
+        <i class="fas fa-heart text-navy-600 text-2xl"></i>
+      </div>
+      <h3 class="text-xl font-bold text-navy-800 mb-3">Our Values</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">Excellence, integrity, inclusivity, and innovation guide every aspect of our academic and administrative operations, ensuring a nurturing environment for all stakeholders.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

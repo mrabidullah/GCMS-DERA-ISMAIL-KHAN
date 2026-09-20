@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="gradient-navy py-16"><div class="max-w-7xl mx-auto px-4 text-center text-white"><h1 class="text-4xl font-bold mb-2">Our Faculty</h1><p class="text-gray-300">Meet our distinguished team of educators</p></div></div>
+<!-- Filter Bar -->
+<div class="bg-white border-b border-gray-200 sticky top-20 z-30">
+  <div class="max-w-7xl mx-auto px-4 py-4">
+    <form method="GET" class="flex flex-wrap gap-3 items-center">
+      <input type="text" name="q" value="{{ query }}" placeholder="Search faculty..." class="w-full sm:w-auto border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-navy-500 focus:outline-none flex-1 sm:min-w-48">
+      <select name="dept" class="w-full sm:w-auto border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-navy-500 focus:outline-none">
+        <option value="">All Departments</option>
+        {% for dept in departments %}<option value="{{ dept.slug }}" {% if dept_slug == dept.slug %}selected{% endif %}>{{ dept.name }}</option>{% endfor %}
+      </select>
+      <button type="submit" class="w-full sm:w-auto px-6 py-2.5 gradient-navy text-white rounded-xl text-sm font-semibold hover:opacity-90 transition"><i class="fas fa-search mr-1"></i> Search</button>
+      {% if query or dept_slug %}<a href="{% url 'faculty' %}" class="w-full sm:w-auto text-center px-4 py-2.5 border-2 border-gray-200 text-gray-600 rounded-xl text-sm hover:border-gray-300 transition">Clear</a>{% endif %}
+    </form>
+  </div>
+</div>
+<div class="max-w-7xl mx-auto px-4 py-12">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {% for member in faculty %}
+    <a href="{{ member.get_absolute_url }}" class="group card-hover bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 text-center">
+      <div class="h-52 overflow-hidden">{% if member.photo %}<img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">{% else %}<div class="w-full h-full gradient-navy flex items-center justify-center"><i class="fas fa-user-tie text-white opacity-30 text-6xl"></i></div>{% endif %}</div>
+      <div class="p-4">
+        <h3 class="font-bold text-navy-800 group-hover:text-navy-600 transition break-words">{{ member.name }}</h3>
+        <p class="text-yellow-600 text-sm font-medium mt-1 break-words">{{ member.designation }}</p>
+        {% if member.department %}<p class="text-gray-500 text-xs mt-1 break-words">{{ member.department.name }}</p>{% endif %}
+        {% if member.qualification %}<p class="text-gray-400 text-xs mt-1 break-words">{{ member.qualification }}</p>{% endif %}
+        {% if member.email %}<p class="text-navy-600 text-xs mt-2 break-all"><i class="fas fa-envelope mr-1"></i>{{ member.email }}</p>{% endif %}
+      </div>
+    </a>
+    {% empty %}
+    <div class="sm:col-span-2 md:col-span-3 lg:col-span-4 text-center py-16 text-gray-400"><i class="fas fa-user-slash text-5xl mb-4 block"></i><p>No faculty members found.</p></div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

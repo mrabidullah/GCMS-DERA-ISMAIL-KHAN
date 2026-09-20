@@ -1,0 +1,337 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% if page_title %}{{ page_title }} – {% endif %}{{ site_settings.site_name }}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Official website of {{ site_settings.site_name }}, {{ site_settings.site_tagline }}.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}GCMS, Government College Management Sciences, Dera Ismail Khan, D.I. Khan{% endblock %}">
+    <!-- Open Graph -->
+    <meta property="og:title" content="{% block og_title %}{{ site_settings.site_name }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ site_settings.site_tagline }}{% endblock %}">
+    <meta property="og:type" content="website">
+
+    <link rel="stylesheet" href="{% static 'css/tailwind.generated.css' %}">
+    <link rel="stylesheet" href="{% static 'css/site.css' %}?v=20260719-2">
+    <link rel="stylesheet" href="{% static 'css/gcms-theme.css' %}">
+
+    {% block extra_css %}{% endblock %}
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<!-- Top utility bar: contact + social ONLY, no auth actions here -->
+<div class="s-topbar">
+  <div class="s-wrap s-topbar__inner">
+    <div class="s-topbar__contacts">
+      {% if site_settings.contact_email %}
+      <a href="mailto:{{ site_settings.contact_email }}"><i class="fas fa-envelope"></i> {{ site_settings.contact_email }}</a>
+      {% endif %}
+      {% if site_settings.contact_phone %}
+      <a href="tel:{{ site_settings.contact_phone }}"><i class="fas fa-phone"></i> {{ site_settings.contact_phone }}</a>
+      {% endif %}
+    </div>
+    <div class="s-topbar__social">
+      {% if site_settings.facebook_url %}<a href="{{ site_settings.facebook_url }}" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>{% endif %}
+      {% if site_settings.twitter_url %}<a href="{{ site_settings.twitter_url }}" target="_blank" rel="noopener" aria-label="Twitter"><i class="fab fa-twitter"></i></a>{% endif %}
+      {% if site_settings.youtube_url %}<a href="{{ site_settings.youtube_url }}" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>{% endif %}
+      {% if site_settings.instagram_url %}<a href="{{ site_settings.instagram_url }}" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>{% endif %}
+        {% if site_settings.linkedin_url %}<a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>{% endif %}
+      </div>
+      {% if user.is_authenticated %}
+      <span class="s-topbar__pipe">|</span>
+      <span class="s-topbar__user">{{ user.get_full_name|default:user.username }}</span>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Sticky nav — the ONLY place auth actions live -->
+<nav class="s-nav">
+  <div class="s-wrap s-nav__row">
+    <a href="{% url 'home' %}" class="s-logo">
+      <img src="{% static 'img/gcms-logo.jpeg' %}" alt="{{ site_settings.site_name }}" class="s-logo__img">
+      <span class="s-logo__text">
+        <span class="s-logo__name">
+          <span class="s-logo__name-mobile">GCMS D.I. Khan</span>
+          <span class="s-logo__name-desktop">GCMS Dera Ismail Khan</span>
+        </span>
+        <span class="s-logo__tag">{{ site_settings.site_tagline }}</span>
+      </span>
+    </a>
+
+    <div class="s-desknav">
+      <a href="{% url 'home' %}" class="s-desknav__link">Home</a>
+      <a href="{% url 'about' %}" class="s-desknav__link">About</a>
+
+      <div class="s-dropdown" data-dropdown>
+        <button type="button" class="s-dropdown__btn" aria-expanded="false" aria-haspopup="true">Academics <i class="fas fa-chevron-down"></i></button>
+        <div class="s-dropdown__menu" role="menu">
+          <a href="{% url 'departments' %}" class="s-dropdown__item" role="menuitem"><i class="fas fa-building"></i> Departments</a>
+          <a href="{% url 'faculty' %}" class="s-dropdown__item" role="menuitem"><i class="fas fa-chalkboard-teacher"></i> Faculty</a>
+          <a href="{% url 'programs' %}" class="s-dropdown__item" role="menuitem"><i class="fas fa-graduation-cap"></i> Academic Programs</a>
+          <a href="{% url 'admissions' %}" class="s-dropdown__item" role="menuitem"><i class="fas fa-file-alt"></i> Admissions</a>
+          <a href="#" class="s-dropdown__item" role="menuitem"><i class="fas fa-file-alt"></i> Attendance</a>
+        </div>
+      </div>
+
+      <div class="s-dropdown" data-dropdown>
+        <button type="button" class="s-dropdown__btn" aria-expanded="false" aria-haspopup="true">News &amp; Events <i class="fas fa-chevron-down"></i></button>
+        <div class="s-dropdown__menu" role="menu">
+          <a href="{% url 'news' %}" class="s-dropdown__item" role="menuitem"><i class="fas fa-newspaper"></i> News</a>
+          <a href="{% url 'announcements' %}" class="s-dropdown__item" role="menuitem"><i class="fas fa-bullhorn"></i> Announcements</a>
+          <a href="{% url 'events' %}" class="s-dropdown__item" role="menuitem"><i class="fas fa-calendar-alt"></i> Events</a>
+        </div>
+      </div>
+
+      <a href="{% url 'gallery' %}" class="s-desknav__link">Gallery</a>
+      <a href="{% url 'downloads' %}" class="s-desknav__link">Downloads</a>
+      <a href="{% url 'contact' %}" class="s-desknav__link">Contact</a>
+       <form action="{% url 'search' %}" method="GET" class="s-search" role="search">
+        <input type="text" name="q" placeholder="Search…" aria-label="Search">
+        <button type="submit" aria-label="Submit search"><i class="fas fa-search"></i></button>
+      </form>
+
+      <div class="s-navcta">
+        {% if user.is_authenticated %}
+          {% if user.user_type == 'student' %}
+          <a href="{% url 'student_portal' %}" class="s-btn s-btn--navy"><i class="fas fa-user-graduate"></i> Portal</a>
+          {% elif user.user_type == 'teacher' %}
+          <a href="{% url 'teacher_portal' %}" class="s-btn s-btn--navy"><i class="fas fa-chalkboard-teacher"></i> Portal</a>
+          {% endif %}
+          {% if user.is_staff %}
+          <a href="{% url 'dashboard_home' %}" class="s-btn s-btn--gold"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+          {% endif %}
+          <a href="{% url 'logout' %}" class="s-btn s-btn--ghost"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        {% else %}
+          <a href="{% url 'login' %}" class="s-btn s-btn--navy"><i class="fas fa-user-circle"></i> Login</a>
+        {% endif %}
+      </div>
+
+     
+    </div>
+
+    <button id="sBurger" class="s-burger" aria-label="Open menu" aria-expanded="false" aria-controls="sMobile">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile / tablet menu -->
+<div id="sMobile" class="s-mobile">
+  <ul class="s-mobile__list">
+    <li><a href="{% url 'home' %}" class="s-mobile__link">Home</a></li>
+    <li><a href="{% url 'about' %}" class="s-mobile__link">About</a></li>
+
+    <li class="s-mobile__group" data-mgroup>
+      <button type="button" class="s-mobile__group-btn" aria-expanded="false">Academics <i class="fas fa-chevron-down chev"></i></button>
+      <div class="s-mobile__submenu">
+        <a href="{% url 'departments' %}" class="s-mobile__sublink"><i class="fas fa-building"></i> Departments</a>
+        <a href="{% url 'faculty' %}" class="s-mobile__sublink"><i class="fas fa-chalkboard-teacher"></i> Faculty</a>
+        <a href="{% url 'programs' %}" class="s-mobile__sublink"><i class="fas fa-graduation-cap"></i> Academic Programs</a>
+        <a href="{% url 'admissions' %}" class="s-mobile__sublink"><i class="fas fa-file-alt"></i> Admissions</a>
+        <a href="#" class="s-mobile__sublink"><i class="fas fa-file-alt"></i>Attendance </a>
+      </div>
+    </li>
+
+    <li class="s-mobile__group" data-mgroup>
+      <button type="button" class="s-mobile__group-btn" aria-expanded="false">News &amp; Events <i class="fas fa-chevron-down chev"></i></button>
+      <div class="s-mobile__submenu">
+        <a href="{% url 'news' %}" class="s-mobile__sublink"><i class="fas fa-newspaper"></i> News</a>
+        <a href="{% url 'announcements' %}" class="s-mobile__sublink"><i class="fas fa-bullhorn"></i> Announcements</a>
+        <a href="{% url 'events' %}" class="s-mobile__sublink"><i class="fas fa-calendar-alt"></i> Events</a>
+      </div>
+    </li>
+
+    <li><a href="{% url 'gallery' %}" class="s-mobile__link">Gallery</a></li>
+    <li><a href="{% url 'downloads' %}" class="s-mobile__link">Downloads</a></li>
+    <li><a href="{% url 'contact' %}" class="s-mobile__link">Contact</a></li>
+  </ul>
+
+  <div class="s-mobile__divider"></div>
+
+  <div class="s-mobile__cta">
+    {% if user.is_authenticated %}
+      {% if user.user_type == 'student' %}
+      <a href="{% url 'student_portal' %}" class="s-btn s-btn--navy s-mobile__portal"><i class="fas fa-user-graduate"></i> Student Portal</a>
+      {% elif user.user_type == 'teacher' %}
+      <a href="{% url 'teacher_portal' %}" class="s-btn s-btn--navy s-mobile__portal"><i class="fas fa-chalkboard-teacher"></i> Teacher Portal</a>
+      {% endif %}
+      {% if user.is_staff %}
+      <a href="{% url 'dashboard_home' %}" class="s-btn s-btn--gold s-mobile__portal"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      {% endif %}
+      <a href="{% url 'logout' %}" class="s-mobile__link s-mobile__gold-link">Logout</a>
+    {% else %}
+      <a href="{% url 'login' %}" class="s-btn s-btn--navy s-mobile__full"><i class="fas fa-user-circle"></i> Login</a>
+    {% endif %}
+  </div>
+
+  <form action="{% url 'search' %}" method="GET" class="s-mobile__search" role="search">
+    <input type="text" name="q" placeholder="Search…" aria-label="Search">
+    <button type="submit" aria-label="Submit search"><i class="fas fa-search"></i></button>
+  </form>
+</div>
+
+<!-- Admission Banner -->
+{% if site_settings.is_admission_open %}
+<div class="s-admission">
+  <i class="fas fa-star"></i>
+  {{ site_settings.admission_banner_text|default:"Admissions Are Open! Apply Now for the New Session." }}
+  <a href="{{ site_settings.admission_link }}">Apply Now →</a>
+</div>
+{% endif %}
+
+<!-- Django Messages -->
+{% if messages %}
+<div class="s-wrap s-messages">
+  {% for message in messages %}
+  <div class="s-message {% if message.tags == 'error' %}s-message--error{% elif message.tags == 'success' %}s-message--success{% else %}s-message--info{% endif %}">
+    <i class="fas {% if message.tags == 'error' %}fa-exclamation-circle{% elif message.tags == 'success' %}fa-check-circle{% else %}fa-info-circle{% endif %}"></i>
+    <span>{{ message }}</span>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- Page Content -->
+<main>
+{% block content %}{% endblock %}
+</main>
+
+<!-- Footer -->
+<footer class="s-footer">
+  <div class="s-wrap s-footer__grid">
+    <div>
+      <div class="s-footer__brand">
+        <img src="{% static 'img/gcms-logo.jpeg' %}" alt="{{ site_settings.site_name }}">
+        <div>
+          <div class="s-footer__brand-name">{{ site_settings.site_name }}</div>
+          
+        </div>
+      </div>
+      <p class="s-footer__desc">{{ site_settings.footer_text|default:"Empowering students through quality education since establishment. GCMS Dera Ismail Khan is committed to academic excellence." }}</p>
+      <div class="s-footer__social">
+        {% if site_settings.facebook_url %}<a href="{{ site_settings.facebook_url }}" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>{% endif %}
+        {% if site_settings.twitter_url %}<a href="{{ site_settings.twitter_url }}" target="_blank" rel="noopener" aria-label="Twitter"><i class="fab fa-twitter"></i></a>{% endif %}
+        {% if site_settings.youtube_url %}<a href="{{ site_settings.youtube_url }}" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>{% endif %}
+        {% if site_settings.instagram_url %}<a href="{{ site_settings.instagram_url }}" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>{% endif %}
+        {% if site_settings.linkedin_url %}<a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>{% endif %}
+      </div>
+    </div>
+
+    <div>
+      <h3 class="s-footer__heading">Quick Links</h3>
+      <ul class="s-footer__list">
+        <li><a href="{% url 'about' %}"><i class="fas fa-angle-right"></i> About GCMS</a></li>
+        <li><a href="{% url 'admissions' %}"><i class="fas fa-angle-right"></i> Admissions</a></li>
+        <li><a href="{% url 'programs' %}"><i class="fas fa-angle-right"></i> Academic Programs</a></li>
+        <li><a href="{% url 'faculty' %}"><i class="fas fa-angle-right"></i> Faculty</a></li>
+        <li><a href="{% url 'news' %}"><i class="fas fa-angle-right"></i> Latest News</a></li>
+        <li><a href="{% url 'downloads' %}"><i class="fas fa-angle-right"></i> Downloads</a></li>
+        <li><a href="{% url 'faq' %}"><i class="fas fa-angle-right"></i> FAQs</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="s-footer__heading">Portals</h3>
+      <ul class="s-footer__list">
+        <li><a href="{% url 'student_portal' %}"><i class="fas fa-user-graduate"></i> Student Portal</a></li>
+        <li><a href="{% url 'teacher_portal' %}"><i class="fas fa-chalkboard-teacher"></i> Teacher Portal</a></li>
+        <li><a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Register</a></li>
+        <li><a href="{% url 'login' %}"><i class="fas fa-user-circle"></i> Login</a></li>
+        <li><a href="{% url 'privacy_policy' %}"><i class="fas fa-shield-alt"></i> Privacy Policy</a></li>
+        <li><a href="{% url 'terms_conditions' %}"><i class="fas fa-file-contract"></i> Terms &amp; Conditions</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="s-footer__heading">Contact Us</h3>
+      <ul class="s-footer__contact">
+        {% if site_settings.contact_address %}
+        <li><i class="fas fa-map-marker-alt"></i><span>{{ site_settings.contact_address }}</span></li>
+        {% endif %}
+        {% if site_settings.contact_phone %}
+        <li><i class="fas fa-phone"></i><a href="tel:{{ site_settings.contact_phone }}">{{ site_settings.contact_phone }}</a></li>
+        {% endif %}
+        {% if site_settings.contact_email %}
+        <li><i class="fas fa-envelope"></i><a href="mailto:{{ site_settings.contact_email }}">{{ site_settings.contact_email }}</a></li>
+        {% endif %}
+        {% if site_settings.office_hours %}
+        <li><i class="fas fa-clock"></i><span>{{ site_settings.office_hours }}</span></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="s-footer__bottom">
+    <div class="s-wrap s-footer__bottom-inner">
+      <span>&copy; {% now "Y" %} {{ site_settings.site_name }}. All rights reserved.</span>
+      <div class="s-footer__bottom-links">
+        <a href="{% url 'privacy_policy' %}">Privacy Policy</a>
+        <span>·</span>
+        <a href="{% url 'terms_conditions' %}">Terms &amp; Conditions</a>
+        <span>·</span>
+        <a href="{% url 'contact' %}">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button id="sScrollTop" class="s-scrolltop" aria-label="Scroll to top"><i class="fas fa-chevron-up"></i></button>
+
+<script>
+(function () {
+  /* Mobile menu open/close */
+  var burger = document.getElementById('sBurger');
+  var mobile = document.getElementById('sMobile');
+  burger.addEventListener('click', function () {
+    var open = mobile.classList.toggle('is-open');
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    burger.innerHTML = open ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+
+  /* Mobile accordion groups */
+  document.querySelectorAll('[data-mgroup]').forEach(function (group) {
+    var btn = group.querySelector('.s-mobile__group-btn');
+    btn.addEventListener('click', function () {
+      var isOpen = group.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  });
+
+  /* Desktop dropdowns — click-based so they work on touch too */
+  var dropdowns = document.querySelectorAll('[data-dropdown]');
+  dropdowns.forEach(function (dd) {
+    var btn = dd.querySelector('.s-dropdown__btn');
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var willOpen = !dd.classList.contains('is-open');
+      dropdowns.forEach(function (other) { other.classList.remove('is-open'); other.querySelector('.s-dropdown__btn').setAttribute('aria-expanded', 'false'); });
+      if (willOpen) { dd.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true'); }
+    });
+  });
+  document.addEventListener('click', function () {
+    dropdowns.forEach(function (dd) { dd.classList.remove('is-open'); dd.querySelector('.s-dropdown__btn').setAttribute('aria-expanded', 'false'); });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      dropdowns.forEach(function (dd) { dd.classList.remove('is-open'); dd.querySelector('.s-dropdown__btn').setAttribute('aria-expanded', 'false'); });
+      if (mobile.classList.contains('is-open')) { burger.click(); }
+    }
+  });
+
+  /* Scroll to top */
+  var scrollBtn = document.getElementById('sScrollTop');
+  window.addEventListener('scroll', function () {
+    scrollBtn.classList.toggle('is-visible', window.scrollY > 300);
+  });
+  scrollBtn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

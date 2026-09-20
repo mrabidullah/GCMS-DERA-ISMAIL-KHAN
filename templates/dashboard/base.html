@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>{% block title %}Admin Dashboard{% endblock %} – GCMS D.I. Khan</title>
+  
+  <!-- Local Tailwind CSS -->
+  <link rel="stylesheet" href="{% static 'css/tailwind.generated.css' %}">
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+  <link rel="stylesheet" href="{% static 'css/gcms-theme.css' %}">
+  
+</head>
+<body class="bg-gray-100">
+  <div class="flex flex-col md:flex-row min-h-screen md:h-screen md:overflow-hidden">
+    
+    <!-- Desktop Sidebar -->
+    <aside class="sidebar-desktop w-64 gradient-navy text-white flex flex-col shrink-0 h-screen overflow-y-auto">
+      <!-- UPDATED LOGO - Full College Branding -->
+      <div class="p-4 md:p-5 border-b border-white border-opacity-10">
+        <div class="flex items-center gap-3 logo-container">
+          <!-- Logo Icon Container -->
+          <div class="logo-icon w-10 h-10 md:w-12 md:h-12 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg overflow-hidden">
+            <img src="{% static 'img/gcms-logo.jpeg' %}" alt="GCMS Logo" class="w-full h-full object-contain p-1">
+          </div>
+          
+          <!-- College Information -->
+          <div class="min-w-0 flex-1">
+            <div class="logo-text font-bold text-[11px] md:text-sm text-white leading-tight uppercase">
+              Government College of<br class="hidden sm:block"> Management Sciences
+            </div>
+            <div class="logo-subtext text-yellow-400 text-[10px] md:text-xs font-medium mt-0.5">
+              D.I. Khan
+            </div>
+            <div class="text-gray-400 text-[9px] md:text-[11px] mt-0.5 hidden xs:block italic">
+              تعلیم، معیشت، قیادت
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Navigation -->
+      <nav class="flex-1 p-2 md:p-3 space-y-0.5 text-sm overflow-y-auto" role="navigation" aria-label="Main navigation">
+        <a href="{% url 'dashboard_home' %}" class="sidebar-link active">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+        
+        <div class="text-[10px] text-gray-500 uppercase tracking-wider px-4 py-2 mt-2 font-semibold">Content</div>
+        
+        <a href="{% url 'manage_hero' %}" class="sidebar-link">
+          <i class="fas fa-image"></i>
+          <span>Hero Section</span>
+        </a>
+        <a href="{% url 'manage_principal_message' %}" class="sidebar-link">
+          <i class="fas fa-quote-left"></i>
+          <span>Principal's Message</span>
+        </a>
+        <a href="{% url 'manage_video' %}" class="sidebar-link">
+          <i class="fas fa-play-circle"></i>
+          <span>Videos</span>
+        </a>
+        <a href="{% url 'manage_news' %}" class="sidebar-link">
+          <i class="fas fa-newspaper"></i>
+          <span>News</span>
+          <span class="ml-auto bg-yellow-400/20 text-yellow-400 text-[10px] px-2 py-0.5 rounded-full"></span>
+        </a>
+        <a href="{% url 'manage_announcements' %}" class="sidebar-link">
+          <i class="fas fa-bullhorn"></i>
+          <span>Announcements</span>
+          <span class="ml-auto bg-yellow-400/20 text-yellow-400 text-[10px] px-2 py-0.5 rounded-full"></span>
+        </a>
+        <a href="{% url 'manage_events' %}" class="sidebar-link">
+          <i class="fas fa-calendar-alt"></i>
+          <span>Events</span>
+          <span class="ml-auto bg-yellow-400/20 text-yellow-400 text-[10px] px-2 py-0.5 rounded-full"></span>
+        </a>
+        <a href="{% url 'manage_gallery' %}" class="sidebar-link">
+          <i class="fas fa-images"></i>
+          <span>Gallery</span>
+        </a>
+        <a href="{% url 'manage_downloads' %}" class="sidebar-link">
+          <i class="fas fa-download"></i>
+          <span>Downloads</span>
+        </a>
+        
+        <div class="text-[10px] text-gray-500 uppercase tracking-wider px-4 py-2 mt-2 font-semibold">Academics</div>
+        
+        <a href="{% url 'manage_departments' %}" class="sidebar-link">
+          <i class="fas fa-building"></i>
+          <span>Departments</span>
+          <span class="ml-auto bg-yellow-400/20 text-yellow-400 text-[10px] px-2 py-0.5 rounded-full"></span>
+        </a>
+        <a href="{% url 'manage_faculty' %}" class="sidebar-link">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <span>Faculty</span>
+          <span class="ml-auto bg-yellow-400/20 text-yellow-400 text-[10px] px-2 py-0.5 rounded-full"></span>
+        </a>
+        <a href="{% url 'manage_admissions' %}" class="sidebar-link">
+          <i class="fas fa-file-signature"></i>
+          <span>Admissions</span>
+        </a>
+        <div class="text-[10px] text-gray-500 uppercase tracking-wider px-4 py-2 mt-2 font-semibold">Users</div>
+        
+        <a href="{% url 'manage_registrations' %}" class="sidebar-link">
+          <i class="fas fa-user-check"></i>
+          <span>Registrations</span>
+          <span class="ml-auto bg-yellow-400/20 text-yellow-400 text-[10px] px-2 py-0.5 rounded-full"></span>
+        </a>
+        <a href="{% url 'manage_messages' %}" class="sidebar-link">
+          <i class="fas fa-envelope"></i>
+          <span>Messages</span>
+          <span class="ml-auto bg-yellow-400/20 text-yellow-400 text-[10px] px-2 py-0.5 rounded-full"></span>
+        </a>
+        
+        <div class="text-[10px] text-gray-500 uppercase tracking-wider px-4 py-2 mt-2 font-semibold">Settings</div>
+        
+        <a href="{% url 'manage_site_settings' %}" class="sidebar-link">
+          <i class="fas fa-cog"></i>
+          <span>Site Settings</span>
+        </a>
+        <a href="{% url 'home' %}" class="sidebar-link" target="_blank">
+          <i class="fas fa-external-link-alt"></i>
+          <span>View Website</span>
+        </a>
+        
+        <div class="border-t border-white border-opacity-10 my-3"></div>
+        
+        <a href="{% url 'logout' %}" class="sidebar-link text-red-400 hover:text-red-300 hover:bg-red-500/10">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Mobile Sidebar (Hidden by default) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <aside class="sidebar-mobile gradient-navy text-white flex flex-col" id="mobileSidebar">
+      <!-- Close Button -->
+      <button class="close-btn" id="closeSidebarBtn" aria-label="Close menu">
+        <i class="fas fa-times text-lg"></i>
+      </button>
+      
+      <!-- Logo -->
+      <div class="p-4 border-b border-white border-opacity-10 pt-14">
+        <div class="flex items-center gap-3 logo-container">
+          <div class="logo-icon w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg overflow-hidden">
+            <img src="{% static 'img/gcms-logo.jpeg' %}" alt="GCMS Logo" class="w-full h-full object-contain p-1">
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="logo-text font-bold text-sm text-white leading-tight uppercase">
+              Government College of<br> Management Sciences
+            </div>
+            <div class="logo-subtext text-yellow-400 text-xs font-medium mt-0.5">
+              D.I. Khan
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Navigation -->
+      <nav class="flex-1 p-3 space-y-0.5 text-sm overflow-y-auto" role="navigation" aria-label="Mobile navigation">
+        <a href="{% url 'dashboard_home' %}" class="sidebar-link active">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+        
+        <div class="text-[10px] text-gray-500 uppercase tracking-wider px-4 py-2 mt-2 font-semibold">Content</div>
+        
+        <a href="{% url 'manage_hero' %}" class="sidebar-link">
+          <i class="fas fa-image"></i>
+          <span>Hero Section</span>
+        </a>
+        <a href="{% url 'manage_principal_message' %}" class="sidebar-link">
+          <i class="fas fa-quote-left"></i>
+          <span>Principal's Message</span>
+        </a>
+        <a href="{% url 'manage_video' %}" class="sidebar-link">
+          <i class="fas fa-play-circle"></i>
+          <span>Videos</span>
+        </a>
+        <a href="{% url 'manage_news' %}" class="sidebar-link">
+          <i class="fas fa-newspaper"></i>
+          <span>News</span>
+        </a>
+        <a href="{% url 'manage_announcements' %}" class="sidebar-link">
+          <i class="fas fa-bullhorn"></i>
+          <span>Announcements</span>
+        </a>
+        <a href="{% url 'manage_events' %}" class="sidebar-link">
+          <i class="fas fa-calendar-alt"></i>
+          <span>Events</span>
+        </a>
+        <a href="{% url 'manage_gallery' %}" class="sidebar-link">
+          <i class="fas fa-images"></i>
+          <span>Gallery</span>
+        </a>
+        <a href="{% url 'manage_downloads' %}" class="sidebar-link">
+          <i class="fas fa-download"></i>
+          <span>Downloads</span>
+        </a>
+        
+        <div class="text-[10px] text-gray-500 uppercase tracking-wider px-4 py-2 mt-2 font-semibold">Academics</div>
+        
+        <a href="{% url 'manage_departments' %}" class="sidebar-link">
+          <i class="fas fa-building"></i>
+          <span>Departments</span>
+        </a>
+        <a href="{% url 'manage_faculty' %}" class="sidebar-link">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <span>Faculty</span>
+        </a>
+        <a href="{% url 'manage_admissions' %}" class="sidebar-link">
+          <i class="fas fa-file-signature"></i>
+          <span>Admissions</span>
+        </a>
+        <div class="text-[10px] text-gray-500 uppercase tracking-wider px-4 py-2 mt-2 font-semibold">Users</div>
+        
+        <a href="{% url 'manage_registrations' %}" class="sidebar-link">
+          <i class="fas fa-user-check"></i>
+          <span>Registrations</span>
+        </a>
+        <a href="{% url 'manage_messages' %}" class="sidebar-link">
+          <i class="fas fa-envelope"></i>
+          <span>Messages</span>
+        </a>
+        
+        <div class="text-[10px] text-gray-500 uppercase tracking-wider px-4 py-2 mt-2 font-semibold">Settings</div>
+        
+        <a href="{% url 'manage_site_settings' %}" class="sidebar-link">
+          <i class="fas fa-cog"></i>
+          <span>Site Settings</span>
+        </a>
+        <a href="{% url 'home' %}" class="sidebar-link" target="_blank">
+          <i class="fas fa-external-link-alt"></i>
+          <span>View Website</span>
+        </a>
+        
+        <div class="border-t border-white border-opacity-10 my-3"></div>
+        
+        <a href="{% url 'logout' %}" class="sidebar-link text-red-400 hover:text-red-300 hover:bg-red-500/10">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 min-w-0 overflow-y-auto">
+      <!-- Top Bar -->
+      <header class="bg-white shadow-sm sticky top-0 z-30">
+        <div class="px-3 sm:px-4 md:px-6 py-3 sm:py-4 flex items-center justify-between gap-2 sm:gap-3">
+          <div class="flex items-center gap-2 min-w-0 flex-1">
+            <!-- Menu Toggle Button (Mobile) -->
+            <button class="menu-toggle-btn p-1.5 sm:p-2 rounded-lg hover:bg-gray-100 transition touch-manipulation" id="menuToggle" aria-label="Toggle menu">
+              <div class="hamburger" id="hamburgerIcon">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </button>
+            
+            <div class="min-w-0 flex-1">
+              <h1 class="text-base sm:text-lg md:text-xl font-bold text-navy-800 truncate">
+                {% block page_heading %}Dashboard{% endblock %}
+              </h1>
+              <p class="text-gray-500 text-xs sm:text-sm truncate">
+                {% block page_subheading %}{% endblock %}
+              </p>
+            </div>
+          </div>
+          
+          <div class="flex items-center gap-2 sm:gap-3 md:gap-4 flex-shrink-0">
+            <!-- Notification Bell -->
+            <button class="relative p-1.5 sm:p-2 text-gray-500 hover:text-navy-700 rounded-lg hover:bg-gray-50 transition touch-manipulation" aria-label="Notifications">
+              <i class="fas fa-bell text-base sm:text-lg"></i>
+              <span class="absolute top-1 right-1 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-500 rounded-full"></span>
+            </button>
+            
+            <!-- Flash Messages -->
+            {% if messages %}
+            <div class="fixed top-3 sm:top-4 right-3 sm:right-4 z-50 space-y-2 max-w-[90%] sm:max-w-xs w-full" id="flash-messages">
+              {% for message in messages %}
+              <div class="flash-message flex items-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl shadow-lg text-xs sm:text-sm font-medium {% if message.tags == 'error' %}bg-red-100 text-red-700 border border-red-200{% else %}bg-green-100 text-green-700 border border-green-200{% endif %}">
+                <i class="fas {% if message.tags == 'error' %}fa-exclamation-circle{% else %}fa-check-circle{% endif %} flex-shrink-0"></i>
+                <span class="truncate">{{ message }}</span>
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- User Profile -->
+            <div class="flex items-center gap-1.5 sm:gap-2">
+              <div class="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 gradient-navy rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
+                <i class="fas fa-user text-white text-[10px] sm:text-xs md:text-sm"></i>
+              </div>
+              <div class="hidden sm:block min-w-0">
+                <div class="text-xs sm:text-sm font-semibold text-navy-800 truncate max-w-[80px] md:max-w-[120px]">
+                  {{ user.get_full_name|default:user.username }}
+                </div>
+                <div class="text-[10px] sm:text-xs text-gray-500">Administrator</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <!-- Main Content Area -->
+      <main class="p-3 sm:p-4 md:p-6">
+        {% block content %}{% endblock %}
+        
+        <!-- Footer -->
+        <div class="mt-8 text-center text-[10px] sm:text-xs text-gray-400 border-t border-gray-200 pt-4 sm:pt-6">
+          <p>© {% now "Y" %} Government College of Management Sciences, D.I. Khan. All rights reserved.</p>
+          <p class="mt-1 text-gray-500">تعليم، عيدشت، قیادت</p>
+        </div>
+      </main>
+    </div>
+  </div>
+  
+  <!-- JavaScript for Toggle Menu and Flash Messages -->
+  <script>
+    (function() {
+      // DOM Elements
+      const menuToggle = document.getElementById('menuToggle');
+      const hamburgerIcon = document.getElementById('hamburgerIcon');
+      const mobileSidebar = document.getElementById('mobileSidebar');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+      const body = document.body;
+      
+      // Toggle Sidebar
+      function openSidebar() {
+        mobileSidebar.classList.add('open');
+        sidebarOverlay.classList.add('active');
+        hamburgerIcon.classList.add('active');
+        body.classList.add('no-scroll');
+        // Trap focus
+        mobileSidebar.focus();
+      }
+      
+      function closeSidebar() {
+        mobileSidebar.classList.remove('open');
+        sidebarOverlay.classList.remove('active');
+        hamburgerIcon.classList.remove('active');
+        body.classList.remove('no-scroll');
+        menuToggle.focus();
+      }
+      
+      function toggleSidebar() {
+        if (mobileSidebar.classList.contains('open')) {
+          closeSidebar();
+        } else {
+          openSidebar();
+        }
+      }
+      
+      // Event Listeners
+      menuToggle.addEventListener('click', toggleSidebar);
+      closeSidebarBtn.addEventListener('click', closeSidebar);
+      sidebarOverlay.addEventListener('click', closeSidebar);
+      
+      // Close sidebar on Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && mobileSidebar.classList.contains('open')) {
+          closeSidebar();
+        }
+      });
+      
+      // Close sidebar on window resize (if becoming desktop view)
+      window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768 && mobileSidebar.classList.contains('open')) {
+          closeSidebar();
+        }
+      });
+      
+      // Close sidebar when clicking a link (mobile navigation)
+      document.querySelectorAll('.sidebar-mobile .sidebar-link').forEach(function(link) {
+        link.addEventListener('click', function() {
+          if (window.innerWidth < 768) {
+            setTimeout(closeSidebar, 100);
+          }
+        });
+      });
+      
+      // Auto-dismiss flash messages after 5 seconds
+      setTimeout(() => {
+        const msgs = document.getElementById('flash-messages');
+        if (msgs) {
+          setTimeout(() => {
+            msgs.style.transition = 'opacity 0.5s ease';
+            msgs.style.opacity = '0';
+            setTimeout(() => {
+              msgs.style.display = 'none';
+            }, 500);
+          }, 4000);
+        }
+      }, 100);
+      
+      // Close flash messages on tap/click
+      document.addEventListener('click', function(e) {
+        const flashMsg = e.target.closest('.flash-message');
+        if (flashMsg) {
+          const container = flashMsg.parentElement;
+          container.style.transition = 'opacity 0.3s ease';
+          container.style.opacity = '0';
+          setTimeout(() => {
+            container.style.display = 'none';
+          }, 300);
+        }
+      });
+      
+      // Prevent body scroll when sidebar is open (fallback)
+      const observer = new MutationObserver(function() {
+        if (mobileSidebar.classList.contains('open')) {
+          body.style.overflow = 'hidden';
+        } else {
+          body.style.overflow = '';
+        }
+      });
+      
+      observer.observe(mobileSidebar, {
+        attributes: true,
+        attributeFilter: ['class']
+      });
+    })();
+  </script>
+  
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

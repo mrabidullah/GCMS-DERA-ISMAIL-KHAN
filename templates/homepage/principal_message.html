@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- ============================================================
+     Principal's Message — "Full-Bleed Editorial" alternate design
+     Design language: a bold magazine feature spread — dark portrait
+     panel bleeding to the edge, oversized pull-quote, gold accents.
+============================================================= -->
+<section class="pmv2-page">
+
+  <!-- Breadcrumb -->
+  <div class="pmv2-breadcrumb">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <a href="{% url 'home' %}"><i class="fas fa-arrow-left text-xs"></i> Back to Home</a>
+    </div>
+  </div>
+
+  {% if message %}
+  <div class="pmv2-spread">
+
+    <!-- Dark portrait panel -->
+    <div class="pmv2-panel">
+      {% if message.photo %}
+        <img src="{{ message.photo.url }}" alt="{{ message.name }}" class="pmv2-photo">
+      {% else %}
+        <div class="pmv2-photo pmv2-photo-placeholder">
+          <i class="fas fa-user-tie"></i>
+        </div>
+      {% endif %}
+      <div class="pmv2-panel-scrim"></div>
+
+      <div class="pmv2-panel-content">
+        <div class="pmv2-eyebrow">Office of the Principal</div>
+        <div class="pmv2-name">{{ message.name }}</div>
+        <div class="pmv2-designation">{{ message.designation }}</div>
+        {% if message.qualification %}
+          <div class="pmv2-qualification"><i class="fas fa-graduation-cap"></i> {{ message.qualification }}</div>
+        {% endif %}
+      </div>
+
+      <div class="pmv2-seal">GCMS</div>
+    </div>
+
+    <!-- Text column -->
+    <div class="pmv2-copy">
+
+      <h1 class="pmv2-title">A Message to Our Community</h1>
+      <div class="pmv2-rule"></div>
+
+      <!-- Big pull quote: first ~2 sentences of message, pulled visually -->
+      <div class="pmv2-pullquote">
+        {{ message.message|linebreaks|truncatewords:22 }}
+      </div>
+
+      <div class="pmv2-fulltext">
+        {{ message.message|linebreaks }}
+      </div>
+
+      <!-- Vertical fact timeline -->
+      <div class="pmv2-timeline">
+        <div class="pmv2-timeline-item">
+          <span class="pmv2-timeline-dot"></span>
+          <div>
+            <div class="pmv2-timeline-value">2010</div>
+            <div class="pmv2-timeline-label">School founded</div>
+          </div>
+        </div>
+        <div class="pmv2-timeline-item">
+          <span class="pmv2-timeline-dot"></span>
+          <div>
+            <div class="pmv2-timeline-value">5,000+</div>
+            <div class="pmv2-timeline-label">Students taught</div>
+          </div>
+        </div>
+        <div class="pmv2-timeline-item">
+          <span class="pmv2-timeline-dot"></span>
+          <div>
+            <div class="pmv2-timeline-value">Today</div>
+            <div class="pmv2-timeline-label">{{ message.updated_at|date:"F j, Y"|default:"Ongoing commitment to excellence" }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pmv2-footer">
+        <div class="pmv2-verified"><i class="fas fa-check-circle"></i> Verified message</div>
+        <div class="pmv2-share">
+          <span>Share</span>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  {% else %}
+  <div class="pmv2-empty">
+    <div class="pmv2-empty-icon"><i class="fas fa-user-tie"></i></div>
+    <h3>No Message Available</h3>
+    <p>The principal's message will be updated soon. Please check back later.</p>
+    <a href="{% url 'home' %}"><i class="fas fa-arrow-left"></i> Back to Home</a>
+  </div>
+  {% endif %}
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'dashboard/base.html' %}
+{% block page_heading %}Dashboard{% endblock %}
+{% block page_subheading %}Welcome back, {{ user.get_full_name|default:user.username }}{% endblock %}
+{% block content %}
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+  <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+    <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center"><i class="fas fa-newspaper text-blue-500"></i></div><span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">{{ published_news }} live</span></div>
+    <div class="text-2xl font-bold text-navy-800">{{ total_news }}</div><div class="text-gray-500 text-sm">News Articles</div>
+  </div>
+  <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+    <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center"><i class="fas fa-chalkboard-teacher text-purple-500"></i></div></div>
+    <div class="text-2xl font-bold text-navy-800">{{ total_faculty }}</div><div class="text-gray-500 text-sm">Faculty Members</div>
+  </div>
+  <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+    <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-yellow-50 rounded-xl flex items-center justify-center"><i class="fas fa-user-graduate text-yellow-500"></i></div></div>
+    <div class="text-2xl font-bold text-navy-800">{{ total_students }}</div><div class="text-gray-500 text-sm">Students</div>
+  </div>
+  <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+    <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center"><i class="fas fa-user-check text-red-500"></i></div>{% if pending_registrations %}<span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">{{ pending_registrations }} pending</span>{% endif %}</div>
+    <div class="text-2xl font-bold text-navy-800">{{ pending_registrations }}</div><div class="text-gray-500 text-sm">Pending Registrations</div>
+  </div>
+</div>
+
+<div class="grid md:grid-cols-2 gap-4 mb-6">
+  <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+    <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center"><i class="fas fa-envelope text-green-500"></i></div>{% if unread_messages %}<span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">{{ unread_messages }} new</span>{% endif %}</div>
+    <div class="text-2xl font-bold text-navy-800">{{ unread_messages }}</div><div class="text-gray-500 text-sm">Unread Messages</div>
+  </div>
+  <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+    <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center"><i class="fas fa-calendar-alt text-indigo-500"></i></div></div>
+    <div class="text-2xl font-bold text-navy-800">{{ upcoming_events }}</div><div class="text-gray-500 text-sm">Upcoming Events</div>
+  </div>
+  <a href="{% url 'manage_admissions' %}" class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition">
+    <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-yellow-50 rounded-xl flex items-center justify-center"><i class="fas fa-file-signature text-yellow-500"></i></div>{% if pending_admissions %}<span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full">{{ pending_admissions }} waiting</span>{% endif %}</div>
+    <div class="text-2xl font-bold text-navy-800">{{ pending_admissions }}</div><div class="text-gray-500 text-sm">Admission Applications</div>
+  </a>
+</div>
+
+<div class="grid md:grid-cols-2 gap-4 mb-6">
+  <a href="{% url 'programs' %}" target="_blank" class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition">
+    <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center"><i class="fas fa-graduation-cap text-green-500"></i></div></div>
+    <div class="text-lg font-bold text-navy-800">Programs</div><div class="text-gray-500 text-sm">Public Programs Page</div>
+  </a>
+  <a href="{% url 'admissions' %}" target="_blank" class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition">
+    <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 bg-yellow-50 rounded-xl flex items-center justify-center"><i class="fas fa-file-alt text-yellow-500"></i></div></div>
+    <div class="text-lg font-bold text-navy-800">Admissions</div><div class="text-gray-500 text-sm">Public Admissions Page</div>
+  </a>
+</div>
+
+<!-- Quick Actions -->
+<div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-6">
+  <h3 class="font-bold text-navy-800 mb-4">Quick Actions</h3>
+  <div class="grid grid-cols-3 md:grid-cols-6 gap-3">
+    <a href="{% url 'manage_news' %}" class="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-navy-50 transition group"><div class="w-10 h-10 gradient-navy rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform"><i class="fas fa-plus text-white text-sm"></i></div><span class="text-xs text-gray-600 font-medium text-center">Add News</span></a>
+    <a href="{% url 'manage_announcements' %}" class="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-navy-50 transition group"><div class="w-10 h-10 bg-yellow-400 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform"><i class="fas fa-bullhorn text-navy-900 text-sm"></i></div><span class="text-xs text-gray-600 font-medium text-center">Announcement</span></a>
+    <a href="{% url 'manage_faculty' %}" class="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-navy-50 transition group"><div class="w-10 h-10 bg-purple-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform"><i class="fas fa-user-plus text-white text-sm"></i></div><span class="text-xs text-gray-600 font-medium text-center">Add Faculty</span></a>
+    <a href="{% url 'manage_admissions' %}" class="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-navy-50 transition group"><div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform"><i class="fas fa-file-signature text-white text-sm"></i></div><span class="text-xs text-gray-600 font-medium text-center">Admissions</span></a>
+    <a href="{% url 'manage_registrations' %}" class="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-navy-50 transition group"><div class="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform"><i class="fas fa-user-check text-white text-sm"></i></div><span class="text-xs text-gray-600 font-medium text-center">Registrations</span></a>
+    <a href="{% url 'manage_gallery' %}" class="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-navy-50 transition group"><div class="w-10 h-10 bg-pink-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform"><i class="fas fa-images text-white text-sm"></i></div><span class="text-xs text-gray-600 font-medium text-center">Gallery</span></a>
+    <a href="{% url 'manage_site_settings' %}" class="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-navy-50 transition group"><div class="w-10 h-10 bg-gray-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform"><i class="fas fa-cog text-white text-sm"></i></div><span class="text-xs text-gray-600 font-medium text-center">Settings</span></a>
+  </div>
+</div>
+
+<!-- Recent Messages and Pending Registrations -->
+<div class="grid md:grid-cols-2 gap-6">
+  {% if recent_messages %}
+  <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+    <div class="flex items-center justify-between mb-4"><h3 class="font-bold text-navy-800">Recent Messages</h3><a href="{% url 'manage_messages' %}" class="text-navy-600 text-sm hover:text-navy-800 transition">View All →</a></div>
+    <div class="space-y-3">
+      {% for msg in recent_messages %}
+      <div class="flex items-center gap-3 p-3 rounded-xl bg-gray-50">
+        <div class="w-9 h-9 gradient-navy rounded-full flex items-center justify-center shrink-0"><span class="text-white text-xs font-bold">{{ msg.name|first }}</span></div>
+        <div class="flex-1 min-w-0"><h4 class="text-sm font-semibold text-navy-800 truncate">{{ msg.name }}</h4><p class="text-gray-500 text-xs truncate">{{ msg.subject }}</p></div>
+        <span class="text-xs text-gray-400">{{ msg.created_at|date:"M d" }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  {% if pending_regs %}
+  <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+    <div class="flex items-center justify-between mb-4"><h3 class="font-bold text-navy-800">Pending Registrations</h3><a href="{% url 'manage_registrations' %}" class="text-navy-600 text-sm hover:text-navy-800 transition">View All →</a></div>
+    <div class="space-y-3">
+      {% for reg in pending_regs %}
+      <div class="flex items-center gap-3 p-3 rounded-xl bg-yellow-50">
+        <div class="w-9 h-9 bg-yellow-400 rounded-full flex items-center justify-center shrink-0"><span class="text-navy-900 text-xs font-bold">{{ reg.user.get_full_name|first|default:reg.user.username|first }}</span></div>
+        <div class="flex-1 min-w-0"><h4 class="text-sm font-semibold text-navy-800 truncate">{{ reg.user.get_full_name|default:reg.user.username }}</h4><p class="text-gray-500 text-xs capitalize">{{ reg.user.user_type }}</p></div>
+        <form method="POST" action="{% url 'manage_registrations' %}" class="flex gap-1">{% csrf_token %}<input type="hidden" name="req_id" value="{{ reg.pk }}"><button name="action" value="approve" class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-lg hover:bg-green-200 transition"><i class="fas fa-check"></i></button><button name="action" value="reject" class="text-xs bg-red-100 text-red-700 px-2 py-1 rounded-lg hover:bg-red-200 transition"><i class="fas fa-times"></i></button></form>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

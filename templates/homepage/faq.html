@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="gradient-navy py-16"><div class="max-w-7xl mx-auto px-4 text-center text-white"><h1 class="text-4xl font-bold mb-2">Frequently Asked Questions</h1><p class="text-gray-300">Find answers to common questions about GCMS</p></div></div>
+<div class="max-w-3xl mx-auto px-4 py-16">
+  {% if faqs %}
+  <div class="space-y-4">
+    {% for faq in faqs %}
+    <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+      <button class="w-full text-left px-6 py-5 flex items-center justify-between font-semibold text-navy-800 hover:bg-gray-50 transition faq-btn">
+        <span>{{ faq.question }}</span>
+        <i class="fas fa-chevron-down text-yellow-400 transition-transform"></i>
+      </button>
+      <div class="faq-answer hidden px-6 pb-5 text-gray-600 leading-relaxed border-t border-gray-100 pt-4">{{ faq.answer }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="text-center py-16 text-gray-400"><i class="fas fa-question-circle text-5xl mb-4 block"></i><p>No FAQs available yet. Please <a href="{% url 'contact' %}" class="text-navy-600 hover:underline">contact us</a> with your questions.</p></div>
+  {% endif %}
+</div>
+<script>
+document.querySelectorAll('.faq-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const answer = btn.nextElementSibling;
+    const icon = btn.querySelector('i');
+    answer.classList.toggle('hidden');
+    icon.classList.toggle('rotate-180');
+  });
+});
+</script>
+{% endblock %}

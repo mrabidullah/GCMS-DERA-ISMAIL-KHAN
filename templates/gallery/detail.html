@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="gradient-navy py-16"><div class="max-w-7xl mx-auto px-4"><nav class="flex items-center gap-2 text-sm text-gray-400 mb-3"><a href="{% url 'home' %}" class="hover:text-yellow-300">Home</a><i class="fas fa-chevron-right text-xs"></i><a href="{% url 'gallery' %}" class="hover:text-yellow-300">Gallery</a><i class="fas fa-chevron-right text-xs"></i><span class="text-yellow-300">{{ album.title }}</span></nav><h1 class="text-4xl font-bold text-white">{{ album.title }}</h1><p class="text-gray-300 mt-1">{{ items.count }} items</p></div></div>
+<div class="max-w-7xl mx-auto px-4 py-12">
+  <div class="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+    {% for item in items %}
+    {% if item.item_type == 'image' and item.image %}
+    <div class="break-inside-avoid rounded-xl overflow-hidden shadow-md cursor-pointer group" onclick="openLightbox('{{ item.image.url }}', '{{ item.title|escapejs }}')">
+      <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full group-hover:scale-105 transition-transform duration-500" loading="lazy">
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+<!-- Lightbox -->
+<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-95 z-50 hidden flex items-center justify-center p-4">
+  <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white text-3xl hover:text-yellow-300 transition"><i class="fas fa-times"></i></button>
+  <img id="lightbox-img" src="" alt="" class="max-h-screen max-w-full rounded-xl shadow-2xl">
+</div>
+<script>
+function openLightbox(url, title) { document.getElementById('lightbox').classList.remove('hidden'); document.getElementById('lightbox-img').src = url; document.getElementById('lightbox-img').alt = title; }
+function closeLightbox() { document.getElementById('lightbox').classList.add('hidden'); document.getElementById('lightbox-img').src = ''; }
+document.getElementById('lightbox').addEventListener('click', function(e) { if(e.target === this) closeLightbox(); });
+</script>
+{% endblock %}

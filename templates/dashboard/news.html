@@ -1,0 +1,38 @@
+{% extends 'dashboard/base.html' %}
+{% block page_heading %}News Management{% endblock %}
+{% block page_subheading %}Publish and manage news articles{% endblock %}
+{% block content %}
+<div class="grid lg:grid-cols-5 gap-6">
+  <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+    <h3 class="font-bold text-navy-800 mb-5 flex items-center gap-2"><i class="fas fa-plus-circle text-yellow-400"></i> Add News Article</h3>
+    <form method="POST" enctype="multipart/form-data" class="space-y-4">
+      {% csrf_token %}<input type="hidden" name="action" value="create">
+      <div><label class="block text-sm font-semibold text-gray-700 mb-1">Title *</label><input type="text" name="title" required class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+      <div><label class="block text-sm font-semibold text-gray-700 mb-1">Category</label><select name="category" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"><option value="">No Category</option>{% for cat in categories %}<option value="{{ cat.pk }}">{{ cat.name }}</option>{% endfor %}</select></div>
+      <div><label class="block text-sm font-semibold text-gray-700 mb-1">Image</label><input type="file" name="image" accept="image/*" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm"></div>
+      <div><label class="block text-sm font-semibold text-gray-700 mb-1">Excerpt</label><textarea name="excerpt" rows="2" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></textarea></div>
+      <div><label class="block text-sm font-semibold text-gray-700 mb-1">Content *</label><textarea name="content" rows="6" required class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></textarea></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Status</label><select name="status" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"><option value="draft">Draft</option><option value="published">Published</option></select></div>
+        <div class="flex items-center gap-2 pt-6"><input type="checkbox" name="is_featured" id="featured"><label for="featured" class="text-sm font-semibold text-gray-700">Featured</label></div>
+      </div>
+      <button type="submit" class="w-full py-3 gradient-navy text-white font-semibold rounded-xl hover:opacity-90 transition"><i class="fas fa-save mr-2"></i>Save Article</button>
+    </form>
+  </div>
+  <div class="lg:col-span-3 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+    <h3 class="font-bold text-navy-800 mb-5">Recent Articles</h3>
+    <div class="space-y-3 overflow-y-auto max-h-600">
+      {% for article in articles %}
+      <div class="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:bg-gray-50 transition">
+        {% if article.image %}<img src="{{ article.image.url }}" alt="" class="w-12 h-12 rounded-lg object-cover shrink-0">{% else %}<div class="w-12 h-12 bg-navy-50 rounded-lg flex items-center justify-center shrink-0"><i class="fas fa-newspaper text-navy-300"></i></div>{% endif %}
+        <div class="flex-1 min-w-0"><h4 class="font-semibold text-navy-800 text-sm truncate">{{ article.title }}</h4><div class="flex items-center gap-2 mt-0.5"><span class="text-xs {% if article.status == 'published' %}bg-green-100 text-green-700{% else %}bg-yellow-100 text-yellow-700{% endif %} px-2 py-0.5 rounded-full">{{ article.status|capfirst }}</span>{% if article.is_featured %}<span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">Featured</span>{% endif %}<span class="text-gray-400 text-xs">{{ article.published_at|date:"M d" }}</span></div></div>
+        <div class="flex gap-1 shrink-0">
+          <form method="POST">{% csrf_token %}<input type="hidden" name="action" value="toggle_status"><input type="hidden" name="article_id" value="{{ article.pk }}"><button type="submit" class="w-8 h-8 bg-blue-50 text-blue-500 rounded-lg hover:bg-blue-100 transition text-xs"><i class="fas fa-sync-alt"></i></button></form>
+          <form method="POST">{% csrf_token %}<input type="hidden" name="action" value="delete"><input type="hidden" name="article_id" value="{{ article.pk }}"><button type="submit" class="w-8 h-8 bg-red-50 text-red-500 rounded-lg hover:bg-red-100 transition text-xs" onclick="return confirm('Delete?')"><i class="fas fa-trash"></i></button></form>
+        </div>
+      </div>
+      {% empty %}<div class="text-center py-8 text-gray-400 text-sm">No articles yet</div>{% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

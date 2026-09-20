@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="gradient-navy py-12">
+  <div class="max-w-7xl mx-auto px-4 flex items-center justify-between">
+    <div class="text-white">
+      <h1 class="text-3xl font-bold">Teacher Portal</h1>
+      <p class="text-gray-300 mt-1">Welcome, {{ user.get_full_name|default:user.username }}</p>
+    </div>
+    <div class="flex gap-3">
+      <a href="{% url 'edit_profile' %}" class="px-4 py-2 bg-yellow-400 text-navy-900 rounded-lg font-semibold text-sm hover:bg-yellow-300 transition"><i class="fas fa-user-edit mr-1"></i> Edit Profile</a>
+      <a href="{% url 'change_password' %}" class="px-4 py-2 glass text-white rounded-lg font-semibold text-sm hover:bg-white hover:text-navy-800 transition"><i class="fas fa-key mr-1"></i> Change Password</a>
+    </div>
+  </div>
+</div>
+<div class="max-w-7xl mx-auto px-4 py-10">
+  <div class="grid lg:grid-cols-4 gap-6">
+    <div class="space-y-4">
+      <div class="bg-white rounded-2xl shadow-md p-6 text-center">
+        {% if user.profile_picture %}
+        <img src="{{ user.profile_picture.url }}" alt="Profile" class="w-24 h-24 rounded-full object-cover mx-auto mb-4 border-4 border-yellow-400">
+        {% else %}
+        <div class="w-24 h-24 gradient-navy rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-user-tie text-white text-3xl"></i></div>
+        {% endif %}
+        <h3 class="font-bold text-navy-800 text-lg">{{ user.get_full_name|default:user.username }}</h3>
+        <p class="text-gray-500 text-sm mt-1"><i class="fas fa-chalkboard-teacher text-navy-600 mr-1"></i> Teacher</p>
+        {% if profile and profile.designation %}<p class="text-navy-600 text-sm font-medium mt-1">{{ profile.designation }}</p>{% endif %}
+        {% if profile and profile.department %}<p class="text-gray-400 text-xs mt-1">{{ profile.department.name }}</p>{% endif %}
+        {% if profile and profile.profile_changes_pending %}
+        <span class="inline-block mt-2 text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full"><i class="fas fa-clock mr-1"></i> Profile changes pending approval</span>
+        {% endif %}
+      </div>
+      {% if profile %}
+      <div class="bg-white rounded-2xl shadow-md p-6 space-y-3">
+        <h4 class="font-bold text-navy-800 text-sm uppercase tracking-wide">Teacher Info</h4>
+        {% if profile.qualification %}<div class="text-sm"><span class="text-gray-500 block">Qualification</span><span class="font-medium text-navy-800">{{ profile.qualification }}</span></div>{% endif %}
+        {% if profile.experience %}<div class="text-sm"><span class="text-gray-500 block">Experience</span><span class="font-medium text-navy-800">{{ profile.experience }}</span></div>{% endif %}
+        {% if profile.office_hours %}<div class="text-sm"><span class="text-gray-500 block">Office Hours</span><span class="font-medium text-navy-800">{{ profile.office_hours }}</span></div>{% endif %}
+        {% if profile.specialization %}<div class="text-sm"><span class="text-gray-500 block">Specialization</span><span class="font-medium text-navy-800">{{ profile.specialization }}</span></div>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+    <div class="lg:col-span-3">
+      <div class="bg-white rounded-2xl shadow-md p-8">
+        <h3 class="font-bold text-navy-800 text-lg mb-6 flex items-center gap-2"><i class="fas fa-user-edit text-yellow-400"></i> Update Profile</h3>
+        <form method="POST" action="{% url 'edit_profile' %}" enctype="multipart/form-data" class="space-y-5">
+          {% csrf_token %}
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
+              <input type="tel" name="phone" value="{{ user.phone }}" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-navy-500 focus:outline-none transition">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Profile Picture</label>
+              <input type="file" name="profile_picture" accept="image/*" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-navy-500 focus:outline-none transition">
+            </div>
+            {% if profile %}
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Qualification</label>
+              <input type="text" name="qualification" value="{{ profile.qualification }}" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-navy-500 focus:outline-none transition">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Office Hours</label>
+              <input type="text" name="office_hours" value="{{ profile.office_hours }}" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-navy-500 focus:outline-none transition" placeholder="e.g. Mon–Fri, 9am–11am">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Specialization</label>
+              <input type="text" name="specialization" value="{{ profile.specialization }}" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-navy-500 focus:outline-none transition">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Biography</label>
+              <textarea name="biography" rows="4" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-navy-500 focus:outline-none transition" placeholder="Tell students about yourself...">{{ profile.biography }}</textarea>
+            </div>
+            {% endif %}
+          </div>
+          <p class="text-sm text-yellow-600 bg-yellow-50 rounded-xl p-3"><i class="fas fa-info-circle mr-2"></i> Profile changes require admin approval before they go live.</p>
+          <button type="submit" class="px-8 py-3 gradient-navy text-white font-semibold rounded-xl hover:opacity-90 transition">
+            <i class="fas fa-save mr-2"></i> Update Profile
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

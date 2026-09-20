@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="gradient-navy py-16"><div class="max-w-7xl mx-auto px-4 text-center text-white"><h1 class="text-4xl font-bold mb-2">Contact Us</h1><p class="text-gray-300">We're here to help you</p></div></div>
+<div class="max-w-7xl mx-auto px-4 py-16">
+  <div class="grid lg:grid-cols-2 gap-12">
+    <!-- Contact Form -->
+    <div class="bg-white rounded-3xl shadow-xl p-8">
+      <h2 class="text-2xl font-bold text-navy-800 mb-6 flex items-center gap-2"><i class="fas fa-paper-plane text-yellow-400"></i> Send a Message</h2>
+      <form method="POST" class="space-y-5">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div><label class="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label><input type="text" name="name" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-navy-500 focus:outline-none transition" placeholder="Your full name"></div>
+          <div><label class="block text-sm font-semibold text-gray-700 mb-2">Email *</label><input type="email" name="email" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-navy-500 focus:outline-none transition" placeholder="your@email.com"></div>
+          <div><label class="block text-sm font-semibold text-gray-700 mb-2">Phone</label><input type="tel" name="phone" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-navy-500 focus:outline-none transition" placeholder="+92 xxx xxxxxxx"></div>
+          <div><label class="block text-sm font-semibold text-gray-700 mb-2">Subject *</label><input type="text" name="subject" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-navy-500 focus:outline-none transition" placeholder="Subject of your message"></div>
+        </div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-2">Message *</label><textarea name="message" rows="5" required class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-navy-500 focus:outline-none transition" placeholder="Write your message here..."></textarea></div>
+        <button type="submit" class="w-full py-4 gradient-navy text-white font-bold rounded-xl hover:opacity-90 transition-all transform hover:-translate-y-0.5 shadow-lg"><i class="fas fa-paper-plane mr-2"></i> Send Message</button>
+      </form>
+    </div>
+    <!-- Contact Info -->
+    <div class="space-y-6">
+      <div class="bg-white rounded-2xl shadow-md p-6">
+        <h3 class="font-bold text-navy-800 text-xl mb-5 flex items-center gap-2"><i class="fas fa-info-circle text-yellow-400"></i> Contact Information</h3>
+        <div class="space-y-4">
+          {% if site.contact_address %}<div class="flex items-start gap-4"><div class="w-10 h-10 gradient-navy rounded-xl flex items-center justify-center shrink-0"><i class="fas fa-map-marker-alt text-yellow-400 text-sm"></i></div><div><h4 class="font-semibold text-navy-800 text-sm">Address</h4><p class="text-gray-600 text-sm mt-1">{{ site.contact_address }}</p></div></div>{% endif %}
+          {% if site.contact_phone %}<div class="flex items-center gap-4"><div class="w-10 h-10 gradient-navy rounded-xl flex items-center justify-center shrink-0"><i class="fas fa-phone text-yellow-400 text-sm"></i></div><div><h4 class="font-semibold text-navy-800 text-sm">Phone</h4><a href="tel:{{ site.contact_phone }}" class="text-navy-600 hover:text-navy-800 transition text-sm mt-1 block">{{ site.contact_phone }}</a>{% if site.contact_phone2 %}<a href="tel:{{ site.contact_phone2 }}" class="text-navy-600 hover:text-navy-800 transition text-sm block">{{ site.contact_phone2 }}</a>{% endif %}</div></div>{% endif %}
+          {% if site.contact_email %}<div class="flex items-center gap-4"><div class="w-10 h-10 gradient-navy rounded-xl flex items-center justify-center shrink-0"><i class="fas fa-envelope text-yellow-400 text-sm"></i></div><div><h4 class="font-semibold text-navy-800 text-sm">Email</h4><a href="mailto:{{ site.contact_email }}" class="text-navy-600 hover:text-navy-800 transition text-sm mt-1 block">{{ site.contact_email }}</a></div></div>{% endif %}
+          {% if site.office_hours %}<div class="flex items-center gap-4"><div class="w-10 h-10 gradient-navy rounded-xl flex items-center justify-center shrink-0"><i class="fas fa-clock text-yellow-400 text-sm"></i></div><div><h4 class="font-semibold text-navy-800 text-sm">Office Hours</h4><p class="text-gray-600 text-sm mt-1">{{ site.office_hours }}</p></div></div>{% endif %}
+        </div>
+      </div>
+      {% if site.google_map_embed %}
+      <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+        <div class="p-4 border-b border-gray-100"><h3 class="font-bold text-navy-800 flex items-center gap-2"><i class="fas fa-map text-yellow-400"></i> Find Us on Map</h3></div>
+        <div class="h-64">{{ site.google_map_embed|safe }}</div>
+      </div>
+      {% else %}
+      <div class="bg-navy-50 rounded-2xl p-8 text-center border-2 border-dashed border-navy-200">
+        <i class="fas fa-map text-navy-300 text-4xl mb-3 block"></i>
+        <p class="text-navy-600 font-medium">GCMS D.I. Khan Campus</p>
+        <p class="text-gray-500 text-sm mt-1">Dera Ismail Khan, Khyber Pakhtunkhwa, Pakistan</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

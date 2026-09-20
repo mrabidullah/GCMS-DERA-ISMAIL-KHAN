@@ -1,0 +1,606 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<!--
+  GCMS DIK — Homepage
+  Self-contained design system (navy / brass-gold / cream), using local system font stacks.
+  All styling is scoped under .gcms-home so it cannot collide with base.html or other pages.
+-->
+
+<div class="gcms-home">
+
+<!-- ============ HERO ============ -->
+<section class="gh-hero">
+  <div class="gh-hero__seal" aria-hidden="true">
+    <svg viewBox="0 0 200 200" width="100%" height="100%">
+      <circle cx="100" cy="100" r="96" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="100" cy="100" r="82" fill="none" stroke="currentColor" stroke-width="1"/>
+      <path id="ghSealArc" d="M 100 18 A 82 82 0 0 1 182 100" fill="none"/>
+      <text font-size="10.5" letter-spacing="3" fill="currentColor">
+        <textPath href="#ghSealArc" startOffset="2">GOVERNMENT COLLEGE OF MANAGEMENT SCIENCES</textPath>
+      </text>
+      <circle cx="100" cy="100" r="46" fill="none" stroke="currentColor" stroke-width="1"/>
+      <text x="100" y="96" font-size="15" font-weight="700" text-anchor="middle" fill="currentColor" letter-spacing="2">GCMS</text>
+      <text x="100" y="114" font-size="8.5" text-anchor="middle" fill="currentColor" letter-spacing="1.5">D.I. KHAN</text>
+    </svg>
+  </div>
+
+  {% if hero_slides %}
+  <div class="gh-hero__slides" id="ghSlides">
+    {% for slide in hero_slides %}
+    <div class="gh-hero__slide {% if forloop.first %}is-active{% endif %}" data-index="{{ forloop.counter0 }}">
+      {% if slide.background_image %}
+      <img src="{{ slide.background_image.url }}" alt=""
+          {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+      {% endif %}
+      <div class="gh-hero__scrim"></div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="gh-hero__inner">
+    {% for slide in hero_slides %}
+    <div class="gh-hero__content {% if forloop.first %}is-active{% endif %}" data-index="{{ forloop.counter0 }}">
+      <span class="gh-eyebrow gh-eyebrow--light"><i class="fas fa-star" aria-hidden="true"></i> Government College of Management Sciences</span>
+      {% if forloop.first %}
+      <h1 class="gh-hero__title">{{ slide.title }}</h1>
+      {% else %}
+      <p class="gh-hero__title" role="heading" aria-level="1">{{ slide.title }}</p>
+      {% endif %}
+      {% if slide.subtitle %}<p class="gh-hero__subtitle">{{ slide.subtitle }}</p>{% endif %}
+      {% if slide.description %}<p class="gh-hero__desc">{{ slide.description }}</p>{% endif %}
+      <div class="gh-btn-row">
+        {% if slide.button_text %}<a href="{{ slide.button_link }}" class="gh-btn gh-btn--gold">{{ slide.button_text }}</a>{% endif %}
+        {% if slide.button2_text %}<a href="{{ slide.button2_link }}" class="gh-btn gh-btn--outline-light">{{ slide.button2_text }}</a>{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if hero_slides|length > 1 %}
+  <div class="gh-hero__dots" role="tablist" aria-label="Hero slides">
+    {% for slide in hero_slides %}
+    <button class="gh-hero__dot {% if forloop.first %}is-active{% endif %}" data-index="{{ forloop.counter0 }}"
+            role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            aria-label="Go to slide {{ forloop.counter }}"></button>
+    {% endfor %}
+  </div>
+  <button class="gh-hero__nav gh-hero__nav--prev" id="ghPrev" aria-label="Previous slide"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+  <button class="gh-hero__nav gh-hero__nav--next" id="ghNext" aria-label="Next slide"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+  {% endif %}
+
+  {% else %}
+
+  {% endif %}
+
+  <div class="gh-hero__scroll" aria-hidden="true"><i class="fas fa-chevron-down"></i></div>
+</section>
+
+<!-- ============ STATS ============ -->
+<section class="gh-stats">
+  <div class="gh-container gh-stats__grid">
+    <div class="gh-stat">
+      <span class="gh-stat__num" data-target="2000">1+</span>
+      <span class="gh-stat__label">Students Enrolled</span>
+    </div>
+    <div class="gh-stat">
+      <span class="gh-stat__num" data-target="50">1+</span>
+      <span class="gh-stat__label">Faculty Members</span>
+    </div>
+    <div class="gh-stat">
+      <span class="gh-stat__num" data-target="8">1</span>
+      <span class="gh-stat__label">Departments</span>
+    </div>
+    <div class="gh-stat">
+      <span class="gh-stat__num" data-target="30">1+</span>
+      <span class="gh-stat__label">Years of Excellence</span>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ============ ANNOUNCEMENTS TICKER ============ -->
+{% if announcements %}
+<div class="gh-ticker">
+  <span class="gh-ticker__tag"><i class="fas fa-bullhorn" aria-hidden="true"></i> <span class="gh-ticker__tag-text">Announcements</span></span>
+  <div class="gh-ticker__viewport">
+    <div class="gh-ticker__track">
+      {% for ann in announcements %}
+      <span class="gh-ticker__item {% if ann.priority == 'important' %}is-important{% elif ann.priority == 'urgent' %}is-urgent{% endif %}">
+        {% if ann.is_pinned %}<i class="fas fa-thumbtack" aria-hidden="true"></i>{% endif %}{{ ann.title }}
+      </span>
+      {% endfor %}
+      {% for ann in announcements %}
+      <span class="gh-ticker__item {% if ann.priority == 'important' %}is-important{% elif ann.priority == 'urgent' %}is-urgent{% endif %}" aria-hidden="true">
+        {% if ann.is_pinned %}<i class="fas fa-thumbtack" aria-hidden="true"></i>{% endif %}{{ ann.title }}
+      </span>
+      {% endfor %}
+    </div>
+  </div>
+  <a href="{% url 'announcements' %}" class="gh-ticker__more">All <i class="fas fa-angle-right" aria-hidden="true"></i></a>
+</div>
+{% endif %}
+
+
+
+<!-- ============ ADMISSION STATUS ============ -->
+<section class="gh-section gh-section--tint">
+  <div class="gh-container">
+    <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 md:p-8">
+      <div class="grid lg:grid-cols-2 gap-6 items-center">
+        <div>
+          <span class="gh-eyebrow"><i class="fas fa-file-signature" aria-hidden="true"></i> Admission Status</span>
+          <h2 class="gh-heading">Check Your Admission</h2>
+          <div class="gh-rule"></div>
+          <p class="text-gray-600 text-sm md:text-base">Enter your unique GCMS application number to see whether your admission is confirmed, waiting, pending, or rejected.</p>
+        </div>
+        <form method="POST" action="{% url 'admission_status' %}" class="space-y-3">
+          {% csrf_token %}
+          <label class="block text-sm font-semibold text-gray-700" for="home_application_number">GCMS Application Number</label>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <input id="home_application_number" type="text" name="application_number" required class="flex-1 border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-navy-500 focus:outline-none" placeholder="GCMS-K7P4-X9Q2">
+            <button class="px-6 py-3 gradient-navy text-white rounded-xl hover:opacity-90 transition font-semibold text-sm"><i class="fas fa-check-circle mr-1"></i> Check Status</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+<!-- ============ PRINCIPAL'S MESSAGE ============ -->
+{% if principal_message %}
+<section class="gh-principal">
+  <div class="gh-container gh-principal__grid">
+    <div class="gh-principal__portrait-col">
+      <div class="gh-principal__portrait-wrap">
+        {% if principal_message.photo %}
+        <img src="{{ principal_message.photo.url }}" alt="{{ principal_message.name }}" class="gh-principal__portrait" loading="lazy">
+        {% else %}
+        <div class="gh-principal__portrait gh-principal__portrait--placeholder"><i class="fas fa-user-tie" aria-hidden="true"></i></div>
+        {% endif %}
+        <div class="gh-principal__seal"><span>GCMS</span><small>D.I. Khan</small></div>
+      </div>
+    </div>
+    <div class="gh-principal__copy">
+      <span class="gh-eyebrow"><i class="fas fa-quote-left" aria-hidden="true"></i> From the Desk of</span>
+      <h2 class="gh-heading">Principal's Message</h2>
+      <div class="gh-rule"></div>
+      <div class="gh-principal__message">{{ principal_message.message|linebreaks }}</div>
+      <div class="gh-principal__identity">
+        {% if principal_message.photo %}
+        <img src="{{ principal_message.photo.url }}" alt="{{ principal_message.name }}" class="gh-principal__avatar">
+        {% else %}
+        <div class="gh-principal__avatar gh-principal__avatar--placeholder"><i class="fas fa-user" aria-hidden="true"></i></div>
+        {% endif %}
+        <div>
+          <div class="gh-principal__name">{{ principal_message.name }}</div>
+          <div class="gh-principal__title">{{ principal_message.designation }}</div>
+          {% if principal_message.qualification %}<div class="gh-principal__qual"><i class="fas fa-graduation-cap" aria-hidden="true"></i> {{ principal_message.qualification }}</div>{% endif %}
+        </div>
+      </div>
+      <a href="{% url 'principal_message' %}" class="gh-link-cta">Read Full Message <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ============ DEPARTMENTS ============ -->
+{% if departments %}
+<section class="gh-section">
+  <div class="gh-container">
+
+    <!-- Section Header -->
+    <div class="gh-section__head">
+      <span class="gh-eyebrow">
+        <i class="fas fa-building" aria-hidden="true"></i> Academic Divisions
+      </span>
+      <h2 class="gh-heading">Our Departments</h2>
+      <div class="gh-rule gh-rule--center"></div>
+    </div>
+
+    <!-- Responsive Grid (1 Column on Mobile, 2 on Tablet, 3 on Desktop) -->
+    <div class="gh-grid gh-grid--1 sm:gh-grid--2 md:gh-grid--3 lg:gh-grid--4 xl:gh-grid--5">
+
+
+
+      {% for dept in departments %}
+      <a href="{{ dept.get_absolute_url }}" class="gh-card">
+        
+        <!-- Card Image / Fallback -->
+        <div class="gh-card__media">
+          {% if dept.image %}
+          <img src="{{ dept.image.url }}" alt="{{ dept.name }}" loading="lazy">
+          {% else %}
+          <div class="gh-card__media-fallback">
+            <i class="fas fa-building" aria-hidden="true"></i>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Card Content -->
+        <div class="gh-card__body">
+          <h3 class="gh-card__title">{{ dept.name }}</h3>
+          {% if dept.short_name %}
+          <span class="gh-badge">{{ dept.short_name }}</span>
+          {% endif %}
+          {% if dept.hod_name %}
+          <p class="gh-card__meta">
+            <i class="fas fa-user" aria-hidden="true"></i> {{ dept.hod_name }}
+          </p>
+          {% endif %}
+        </div>
+
+      </a>
+      {% endfor %}
+    </div>
+
+    <!-- Call to Action -->
+    <div class="gh-center-cta">
+      <a href="{% url 'departments' %}" class="gh-btn gh-btn--navy">
+        View All Departments <i class="fas fa-arrow-right" aria-hidden="true"></i>
+      </a>
+    </div>
+
+  </div>
+</section>
+{% endif %}
+
+
+<!-- ============ PROGRAMS ============ -->
+{% if programs %}
+<section class="gh-section gh-section--tint">
+  <div class="gh-container">
+    <div class="gh-section__head">
+      <span class="gh-eyebrow"><i class="fas fa-graduation-cap" aria-hidden="true"></i> What We Offer</span>
+      <h2 class="gh-heading">Academic Programs</h2>
+      <div class="gh-rule gh-rule--center"></div>
+    </div>
+    <div class="gh-grid gh-grid--3">
+      {% for prog in programs %}
+      <div class="gh-card gh-card--pad">
+        <div class="gh-icon-box"><i class="fas fa-graduation-cap" aria-hidden="true"></i></div>
+        <div class="gh-card__title-row">
+          <h3 class="gh-card__title">{{ prog.name }}</h3>
+          <span class="gh-badge gh-badge--navy">{{ prog.get_level_display }}</span>
+        </div>
+        {% if prog.duration %}<p class="gh-card__meta"><i class="fas fa-clock" aria-hidden="true"></i> {{ prog.duration }}</p>{% endif %}
+        {% if prog.description %}<p class="gh-card__desc">{{ prog.description|truncatewords:20 }}</p>{% endif %}
+        <a href="/admissions/programs/{{ prog.slug }}/" class="gh-link">Learn More <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="gh-center-cta"><a href="{% url 'programs' %}" class="gh-btn gh-btn--navy">All Programs <i class="fas fa-arrow-right" aria-hidden="true"></i></a></div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ============ LATEST NEWS ============ -->
+{% if latest_news %}
+<section class="gh-section">
+  <div class="gh-container">
+    <div class="gh-section__head gh-section__head--split">
+      <div>
+        <span class="gh-eyebrow"><i class="fas fa-newspaper" aria-hidden="true"></i> What's Happening</span>
+        <h2 class="gh-heading">Latest News</h2>
+        <div class="gh-rule"></div>
+      </div>
+      <a href="{% url 'news' %}" class="gh-btn gh-btn--outline-navy">View All News →</a>
+    </div>
+    <div class="gh-grid gh-grid--3">
+      {% for article in latest_news %}
+      <article class="gh-card">
+        <div class="gh-card__media gh-card__media--tall">
+          {% if article.image %}
+          <img src="{{ article.image.url }}" alt="{{ article.title }}" loading="lazy">
+          {% else %}
+          <div class="gh-card__media-fallback"><i class="fas fa-newspaper" aria-hidden="true"></i></div>
+          {% endif %}
+        </div>
+        <div class="gh-card__body">
+          {% if article.category %}<span class="gh-badge">{{ article.category.name }}</span>{% endif %}
+          <h3 class="gh-card__title gh-clamp-2">{{ article.title }}</h3>
+          {% if article.excerpt %}<p class="gh-card__desc gh-clamp-2">{{ article.excerpt }}</p>{% endif %}
+          <div class="gh-card__footer">
+            <span class="gh-card__date"><i class="fas fa-calendar" aria-hidden="true"></i> {{ article.published_at|date:"M d, Y" }}</span>
+            <a href="{{ article.get_absolute_url }}" class="gh-link">Read More →</a>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ============ FEATURED VIDEO ============ -->
+{% if featured_video %}
+<section class="gh-section gh-section--navy">
+  <div class="gh-container">
+    <div class="gh-section__head">
+      <span class="gh-eyebrow gh-eyebrow--light"><i class="fas fa-play-circle" aria-hidden="true"></i> Campus Life</span>
+      <h2 class="gh-heading gh-heading--light">{{ featured_video.title }}</h2>
+      <div class="gh-rule gh-rule--center gh-rule--gold"></div>
+    </div>
+    <div class="gh-video-wrap">
+      {% if featured_video.thumbnail %}
+      <div class="gh-video-trigger" id="ghVideoTrigger" role="button" tabindex="0" aria-label="Play video: {{ featured_video.title }}">
+        <img src="{{ featured_video.thumbnail.url }}" alt="{{ featured_video.title }}" loading="lazy">
+        <span class="gh-video-trigger__overlay"><span class="gh-video-trigger__play"><i class="fas fa-play" aria-hidden="true"></i></span></span>
+      </div>
+      {% elif featured_video.get_embed_url %}
+      <div class="gh-video-embed"><iframe src="{{ featured_video.get_embed_url }}" frameborder="0" allowfullscreen loading="lazy" title="{{ featured_video.title }}"></iframe></div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div id="ghVideoModal" class="gh-modal" role="dialog" aria-modal="true" aria-label="{{ featured_video.title }}">
+    <div class="gh-modal__box">
+      <button id="ghVideoClose" class="gh-modal__close" aria-label="Close video"><i class="fas fa-times" aria-hidden="true"></i></button>
+      <div class="gh-video-embed">
+        {% if featured_video.video_type == 'mp4' and featured_video.video_file %}
+        <video id="ghModalVideo" controls><source src="{{ featured_video.video_file.url }}" type="video/mp4"></video>
+        {% else %}
+        <iframe id="ghModalIframe" src="" frameborder="0" allowfullscreen title="{{ featured_video.title }}"></iframe>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ============ FACULTY ============ -->
+{% if faculty_highlights %}
+<section class="gh-section gh-section--tint">
+  <div class="gh-container">
+    <div class="gh-section__head">
+      <span class="gh-eyebrow"><i class="fas fa-chalkboard-teacher" aria-hidden="true"></i> Our Educators</span>
+      <h2 class="gh-heading">Faculty Highlights</h2>
+      <div class="gh-rule gh-rule--center"></div>
+    </div>
+    <div class="gh-grid gh-grid--6">
+      {% for member in faculty_highlights %}
+      <a href="{{ member.get_absolute_url }}" class="gh-faculty">
+        <div class="gh-faculty__avatar">
+          {% if member.photo %}<img src="{{ member.photo.url }}" alt="{{ member.name }}" loading="lazy">
+          {% else %}<div class="gh-faculty__avatar-fallback"><i class="fas fa-user" aria-hidden="true"></i></div>{% endif %}
+        </div>
+        <h4 class="gh-faculty__name">{{ member.name }}</h4>
+        <p class="gh-faculty__role">{{ member.designation }}</p>
+      </a>
+      {% endfor %}
+    </div>
+    <div class="gh-center-cta"><a href="{% url 'faculty' %}" class="gh-btn gh-btn--navy">Meet All Faculty <i class="fas fa-arrow-right" aria-hidden="true"></i></a></div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ============ EVENTS ============ -->
+{% if upcoming_events %}
+<section class="gh-section">
+  <div class="gh-container">
+    <div class="gh-section__head gh-section__head--split">
+      <div>
+        <span class="gh-eyebrow"><i class="fas fa-calendar-alt" aria-hidden="true"></i> Upcoming</span>
+        <h2 class="gh-heading">Campus Events</h2>
+        <div class="gh-rule"></div>
+      </div>
+      <a href="{% url 'events' %}" class="gh-btn gh-btn--outline-navy">All Events →</a>
+    </div>
+    <div class="gh-grid gh-grid--4">
+      {% for event in upcoming_events %}
+      <a href="/events/{{ event.slug }}/" class="gh-card">
+        <div class="gh-card__media">
+          {% if event.image %}<img src="{{ event.image.url }}" alt="{{ event.title }}" loading="lazy">
+          {% else %}<div class="gh-card__media-fallback"><i class="fas fa-calendar-star" aria-hidden="true"></i></div>{% endif %}
+        </div>
+        <div class="gh-card__body">
+          <div class="gh-event__row">
+            <div class="gh-event__date"><span class="gh-event__day">{{ event.event_date|date:"d" }}</span><span class="gh-event__month">{{ event.event_date|date:"M" }}</span></div>
+            <h4 class="gh-event__title gh-clamp-2">{{ event.title }}</h4>
+          </div>
+          {% if event.location %}<p class="gh-card__meta"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> {{ event.location }}</p>{% endif %}
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ============ GALLERY ============ -->
+{% if gallery_albums %}
+<section class="gh-section gh-section--tint">
+  <div class="gh-container">
+    <div class="gh-section__head gh-section__head--split">
+      <div>
+        <span class="gh-eyebrow"><i class="fas fa-images" aria-hidden="true"></i> Campus Life</span>
+        <h2 class="gh-heading">Photo Gallery</h2>
+        <div class="gh-rule"></div>
+      </div>
+      <a href="{% url 'gallery' %}" class="gh-btn gh-btn--outline-navy">View Gallery →</a>
+    </div>
+    <div class="gh-grid gh-grid--3">
+      {% for album in gallery_albums|slice:":6" %}
+      <a href="/gallery/{{ album.slug }}/" class="gh-gallery-tile">
+        {% if album.cover_image %}<img src="{{ album.cover_image.url }}" alt="{{ album.title }}" loading="lazy">
+        {% else %}<div class="gh-card__media-fallback"><i class="fas fa-images" aria-hidden="true"></i></div>{% endif %}
+        <span class="gh-gallery-tile__scrim"></span>
+        <span class="gh-gallery-tile__caption"><strong>{{ album.title }}</strong><small>{{ album.item_count }} photos</small></span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ============ FACILITIES ============ -->
+<section class="gh-section gh-section--navy">
+  <div class="gh-container">
+    <div class="gh-section__head">
+      <span class="gh-eyebrow gh-eyebrow--light"><i class="fas fa-cogs" aria-hidden="true"></i> Student Services</span>
+      <h2 class="gh-heading gh-heading--light">Campus Facilities</h2>
+      <div class="gh-rule gh-rule--center gh-rule--gold"></div>
+    </div>
+    <div class="gh-grid gh-grid--4">
+      {% for facility in campus_facilities %}
+      <div class="gh-facility">
+        <div class="gh-facility__icon"><i class="fas fa-{{ facility.icon }}" aria-hidden="true"></i></div>
+        <h4 class="gh-facility__name">{{ facility.name }}</h4>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT CTA ============ -->
+<section class="gh-cta">
+  <div class="gh-container gh-cta__inner">
+    <h2 class="gh-heading">Have Questions? We're Here to Help.</h2>
+    <p class="gh-cta__text">Contact our admissions office or visit us on campus. Our team is ready to assist you with any inquiries about programs, facilities, or student life.</p>
+    <div class="gh-btn-row gh-btn-row--center">
+      <a href="{% url 'contact' %}" class="gh-btn gh-btn--navy"><i class="fas fa-envelope" aria-hidden="true"></i> Contact Us</a>
+      <a href="{% url 'register' %}" class="gh-btn gh-btn--gold"><i class="fas fa-user-plus" aria-hidden="true"></i> Register Now</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /.gcms-home -->
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+  var root = document.querySelector('.gcms-home');
+  if (!root) return;
+
+  /* ---------- Hero slider ---------- */
+  var slides = root.querySelectorAll('.gh-hero__slide');
+  var contents = root.querySelectorAll('.gh-hero__content');
+  var dots = root.querySelectorAll('.gh-hero__dot');
+  var current = 0, timer;
+
+  function show(n) {
+    var next = (n + slides.length) % slides.length;
+    slides[current].classList.remove('is-active');
+    contents[current].classList.remove('is-active');
+    if (dots[current]) { dots[current].classList.remove('is-active'); dots[current].setAttribute('aria-selected', 'false'); }
+    current = next;
+    slides[current].classList.add('is-active');
+    contents[current].classList.add('is-active');
+    if (dots[current]) { dots[current].classList.add('is-active'); dots[current].setAttribute('aria-selected', 'true'); }
+  }
+
+  function restart() { clearInterval(timer); timer = setInterval(function () { show(current + 1); }, 5500); }
+
+  if (slides.length > 1) {
+    restart();
+    var prevBtn = document.getElementById('ghPrev');
+    var nextBtn = document.getElementById('ghNext');
+    prevBtn && prevBtn.addEventListener('click', function () { show(current - 1); restart(); });
+    nextBtn && nextBtn.addEventListener('click', function () { show(current + 1); restart(); });
+    dots.forEach(function (dot, i) { dot.addEventListener('click', function () { show(i); restart(); }); });
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) { clearInterval(timer); } else { restart(); }
+    });
+  }
+
+  /* ---------- Video modal ---------- */
+  var trigger = document.getElementById('ghVideoTrigger');
+  var modal = document.getElementById('ghVideoModal');
+  var closeBtn = document.getElementById('ghVideoClose');
+  var iframe = document.getElementById('ghModalIframe');
+  var video = document.getElementById('ghModalVideo');
+  var embedUrl = "{{ featured_video.get_embed_url|default:'' }}";
+
+  function openModal() {
+    if (!modal) return;
+    modal.classList.add('is-open');
+    if (iframe) iframe.src = embedUrl + (embedUrl.indexOf('?') > -1 ? '&' : '?') + 'autoplay=1';
+    if (video) video.play().catch(function () {});
+    closeBtn && closeBtn.focus();
+  }
+  function closeModal() {
+    if (!modal) return;
+    modal.classList.remove('is-open');
+    if (iframe) iframe.src = '';
+    if (video) video.pause();
+  }
+
+  if (trigger && modal) {
+    trigger.addEventListener('click', openModal);
+    trigger.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(); }
+    });
+    closeBtn && closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+    });
+  }
+})();
+
+
+
+
+
+
+
+/* start*/
+
+document.addEventListener("DOMContentLoaded", () => {
+  const counters = document.querySelectorAll(".gh-stat__num");
+  const duration = 2000; // Time in milliseconds for animation (2 seconds)
+
+  counters.forEach((counter) => {
+    const target = +counter.getAttribute("data-target");
+    const hasPlus = counter.textContent.includes("+"); 
+    const startTime = performance.now();
+
+    const updateNumber = (currentTime) => {
+      const elapsedTime = currentTime - startTime;
+      const progress = Math.min(elapsedTime / duration, 1); // Caps at 1 (100% complete)
+      
+      // Easing function makes the numbers slow down smoothly at the end
+      const easeOutQuad = progress * (2 - progress);
+      
+      // Forces the start number to be at least 1, then scales up to target
+      const currentValue = Math.max(1, Math.floor(easeOutQuad * target));
+
+      counter.textContent = currentValue + (hasPlus ? "+" : "");
+
+      if (progress < 1) {
+        requestAnimationFrame(updateNumber);
+      } else {
+        counter.textContent = target + (hasPlus ? "+" : ""); // Guarantees exact final number
+      }
+    };
+
+    requestAnimationFrame(updateNumber);
+  });
+});
+
+</script>
+{% endblock %}

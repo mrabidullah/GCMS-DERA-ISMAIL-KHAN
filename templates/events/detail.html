@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-12">
+  <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6"><a href="{% url 'home' %}" class="hover:text-navy-600">Home</a><i class="fas fa-chevron-right text-xs"></i><a href="{% url 'events' %}" class="hover:text-navy-600">Events</a><i class="fas fa-chevron-right text-xs"></i><span class="text-navy-800">{{ event.title|truncatewords:5 }}</span></nav>
+  <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+    {% if event.image %}<img src="{{ event.image.url }}" alt="{{ event.title }}" class="w-full h-72 object-cover" loading="lazy">{% endif %}
+    <div class="p-8">
+      <div class="flex flex-wrap gap-3 mb-5">
+        <div class="flex items-center gap-2 bg-yellow-50 border border-yellow-200 rounded-xl px-4 py-2"><i class="fas fa-calendar text-yellow-500"></i><span class="font-semibold text-navy-800 text-sm">{{ event.event_date|date:"F d, Y" }}</span></div>
+        {% if event.event_time %}<div class="flex items-center gap-2 bg-navy-50 border border-navy-200 rounded-xl px-4 py-2"><i class="fas fa-clock text-navy-500"></i><span class="font-semibold text-navy-800 text-sm">{{ event.event_time|time:"h:i A" }}</span></div>{% endif %}
+        {% if event.location %}<div class="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-4 py-2"><i class="fas fa-map-marker-alt text-green-500"></i><span class="font-semibold text-navy-800 text-sm">{{ event.location }}</span></div>{% endif %}
+      </div>
+      <h1 class="text-3xl font-bold text-navy-800 mb-4">{{ event.title }}</h1>
+      {% if event.organizer %}<p class="text-gray-500 text-sm mb-6"><i class="fas fa-user-tie mr-2 text-navy-400"></i>Organized by: <strong>{{ event.organizer }}</strong></p>{% endif %}
+      {% if event.description %}<div class="prose prose-gray max-w-none text-gray-600 leading-relaxed">{{ event.description|linebreaks }}</div>{% endif %}
+    </div>
+  </div>
+  <div class="mt-6"><a href="{% url 'events' %}" class="text-navy-600 hover:text-navy-800 transition flex items-center gap-2 text-sm font-semibold"><i class="fas fa-arrow-left"></i> Back to Events</a></div>
+</div>
+{% endblock %}

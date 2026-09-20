@@ -1,0 +1,30 @@
+{% extends 'dashboard/base.html' %}
+{% block page_heading %}Registration Requests{% endblock %}
+{% block content %}
+<div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead><tr class="border-b border-gray-200"><th class="text-left py-3 px-4 font-semibold text-gray-600">User</th><th class="text-left py-3 px-4 font-semibold text-gray-600">Type</th><th class="text-left py-3 px-4 font-semibold text-gray-600">Department</th><th class="text-left py-3 px-4 font-semibold text-gray-600">Submitted</th><th class="text-left py-3 px-4 font-semibold text-gray-600">Status</th><th class="text-left py-3 px-4 font-semibold text-gray-600">Actions</th></tr></thead>
+      <tbody>
+        {% for reg in regs %}
+        <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+          <td class="py-3 px-4"><div class="font-semibold text-navy-800">{{ reg.user.get_full_name|default:reg.user.username }}</div><div class="text-gray-400 text-xs">{{ reg.user.email }}</div></td>
+          <td class="py-3 px-4 capitalize"><span class="bg-navy-100 text-navy-700 px-2 py-0.5 rounded-full text-xs font-medium">{{ reg.user.user_type }}</span></td>
+          <td class="py-3 px-4 text-gray-600">{% if reg.user.user_type == 'student' and reg.user.student_profile.department %}{{ reg.user.student_profile.department.name }}{% elif reg.user.user_type == 'teacher' and reg.user.teacher_profile.department %}{{ reg.user.teacher_profile.department.name }}{% else %}-{% endif %}</td>
+          <td class="py-3 px-4 text-gray-500">{{ reg.submitted_at|date:"M d, Y" }}</td>
+          <td class="py-3 px-4"><span class="px-2 py-1 rounded-full text-xs font-semibold {% if reg.status == 'approved' %}bg-green-100 text-green-700{% elif reg.status == 'rejected' %}bg-red-100 text-red-700{% else %}bg-yellow-100 text-yellow-700{% endif %}">{{ reg.status|capfirst }}</span></td>
+          <td class="py-3 px-4">
+            {% if reg.status == 'pending' %}
+            <div class="flex gap-2">
+              <form method="POST">{% csrf_token %}<input type="hidden" name="req_id" value="{{ reg.pk }}"><button name="action" value="approve" class="px-3 py-1.5 bg-green-500 text-white rounded-lg text-xs font-semibold hover:bg-green-600 transition"><i class="fas fa-check mr-1"></i>Approve</button></form>
+              <form method="POST">{% csrf_token %}<input type="hidden" name="req_id" value="{{ reg.pk }}"><button name="action" value="reject" class="px-3 py-1.5 bg-red-500 text-white rounded-lg text-xs font-semibold hover:bg-red-600 transition"><i class="fas fa-times mr-1"></i>Reject</button></form>
+            </div>
+            {% else %}<span class="text-gray-400 text-xs">{{ reg.reviewed_at|date:"M d, Y"|default:"-" }}</span>{% endif %}
+          </td>
+        </tr>
+        {% empty %}<tr><td colspan="6" class="text-center py-16 text-gray-400"><i class="fas fa-inbox text-4xl mb-3 block"></i>No registration requests</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

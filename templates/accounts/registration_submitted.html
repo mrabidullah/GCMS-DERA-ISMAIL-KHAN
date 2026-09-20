@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="min-h-screen flex items-center justify-center py-16 bg-gray-50">
+  <div class="max-w-lg w-full mx-auto px-4 text-center">
+    <div class="bg-white rounded-3xl shadow-xl p-12">
+      <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+        <i class="fas fa-check-circle text-green-500 text-5xl"></i>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-800 mb-3">Registration Submitted!</h1>
+      <p class="text-gray-600 leading-relaxed mb-6">Your registration request has been submitted successfully. <strong>Please wait for the administrator's approval.</strong></p>
+      <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 text-left">
+        <h3 class="font-semibold text-blue-800 mb-2"><i class="fas fa-info-circle mr-2"></i>What happens next?</h3>
+        <ul class="text-sm text-blue-700 space-y-1">
+          <li><i class="fas fa-angle-right mr-2"></i>Admin reviews your request</li>
+          <li><i class="fas fa-angle-right mr-2"></i>Your account is activated upon approval</li>
+          <li><i class="fas fa-angle-right mr-2"></i>You can then login and access your portal</li>
+        </ul>
+      </div>
+      <a href="{% url 'home' %}" class="inline-flex items-center gap-2 px-8 py-3 gradient-navy text-white rounded-xl hover:opacity-90 transition font-semibold">
+        <i class="fas fa-home"></i> Back to Home
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

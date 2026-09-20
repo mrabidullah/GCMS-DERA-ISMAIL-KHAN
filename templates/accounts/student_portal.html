@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Header Section -->
+<div class="gradient-navy py-8 md:py-12">
+  <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
+    <div class="text-white text-center sm:text-left">
+      <h1 class="text-2xl md:text-3xl font-bold">Student Portal</h1>
+      <p class="text-gray-300 mt-1 text-sm md:text-base">
+        <i class="fas fa-user mr-1"></i> Welcome, {{ user.get_full_name|default:user.username }}
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-2 justify-center">
+      <a href="{% url 'edit_profile' %}" class="px-3 md:px-4 py-2 bg-yellow-400 text-navy-900 rounded-lg font-semibold text-xs md:text-sm hover:bg-yellow-300 transition flex items-center gap-1">
+        <i class="fas fa-user-edit"></i> <span class="hidden xs:inline">Edit Profile</span>
+      </a>
+      <a href="{% url 'change_password' %}" class="px-3 md:px-4 py-2 glass text-white rounded-lg font-semibold text-xs md:text-sm hover:bg-white hover:text-navy-800 transition flex items-center gap-1">
+        <i class="fas fa-key"></i> <span class="hidden xs:inline">Change Password</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 py-6 md:py-10">
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    
+    <!-- Sidebar -->
+    <div class="space-y-4">
+      <!-- Profile Card -->
+      <div class="bg-white rounded-2xl shadow-md p-4 md:p-6 text-center">
+        {% if user.profile_picture %}
+          <img src="{{ user.profile_picture.url }}" alt="Profile" class="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover mx-auto mb-3 md:mb-4 border-4 border-yellow-400">
+        {% else %}
+          <div class="w-20 h-20 md:w-24 md:h-24 gradient-navy rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+            <i class="fas fa-user text-white text-2xl md:text-3xl"></i>
+          </div>
+        {% endif %}
+        <h3 class="font-bold text-navy-800 text-base md:text-lg">{{ user.get_full_name|default:user.username }}</h3>
+        <p class="text-gray-500 text-xs md:text-sm mt-1">
+          <i class="fas fa-user-graduate text-navy-600 mr-1"></i> Student
+        </p>
+        {% if profile and profile.department %}
+          <p class="text-gray-400 text-xs mt-1">{{ profile.department.name }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Student Info -->
+      {% if profile %}
+      <div class="bg-white rounded-2xl shadow-md p-4 md:p-6 space-y-3">
+        <h4 class="font-bold text-navy-800 text-xs uppercase tracking-wide border-b pb-2">Student Info</h4>
+        {% if profile.roll_number %}
+          <div class="flex justify-between text-xs md:text-sm">
+            <span class="text-gray-500">Roll No:</span>
+            <span class="font-medium text-navy-800">{{ profile.roll_number }}</span>
+          </div>
+        {% endif %}
+        {% if profile.semester %}
+          <div class="flex justify-between text-xs md:text-sm">
+            <span class="text-gray-500">Semester:</span>
+            <span class="font-medium text-navy-800">{{ profile.semester }}</span>
+          </div>
+        {% endif %}
+        {% if profile.session %}
+          <div class="flex justify-between text-xs md:text-sm">
+            <span class="text-gray-500">Session:</span>
+            <span class="font-medium text-navy-800">{{ profile.session }}</span>
+          </div>
+        {% endif %}
+        {% if profile.father_name %}
+          <div class="flex justify-between text-xs md:text-sm">
+            <span class="text-gray-500">Father:</span>
+            <span class="font-medium text-navy-800">{{ profile.father_name }}</span>
+          </div>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="lg:col-span-3 space-y-6">
+      
+      <!-- Quick Actions - FIXED VERSION -->
+      <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-6 gap-2 md:gap-3">
+        <!-- News -->
+        <a href="{% url 'news' %}" class="bg-white rounded-xl shadow-sm p-2 md:p-3 text-center hover:shadow-md transition card-hover group">
+          <div class="w-8 h-8 md:w-10 md:h-10 gradient-navy rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:scale-110 transition-transform">
+            <i class="fas fa-newspaper text-white text-xs md:text-sm"></i>
+          </div>
+          <span class="text-[10px] md:text-xs font-semibold text-gray-600">News</span>
+        </a>
+        
+        <!-- Announcements -->
+        <a href="{% url 'announcements' %}" class="bg-white rounded-xl shadow-sm p-2 md:p-3 text-center hover:shadow-md transition card-hover group">
+          <div class="w-8 h-8 md:w-10 md:h-10 gradient-navy rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:scale-110 transition-transform">
+            <i class="fas fa-bullhorn text-white text-xs md:text-sm"></i>
+          </div>
+          <span class="text-[10px] md:text-xs font-semibold text-gray-600">Announcements</span>
+        </a>
+        
+        <!-- Events -->
+        <a href="{% url 'events' %}" class="bg-white rounded-xl shadow-sm p-2 md:p-3 text-center hover:shadow-md transition card-hover group">
+          <div class="w-8 h-8 md:w-10 md:h-10 gradient-navy rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:scale-110 transition-transform">
+            <i class="fas fa-calendar text-white text-xs md:text-sm"></i>
+          </div>
+          <span class="text-[10px] md:text-xs font-semibold text-gray-600">Events</span>
+        </a>
+        
+        <!-- Downloads -->
+        <a href="{% url 'downloads' %}" class="bg-white rounded-xl shadow-sm p-2 md:p-3 text-center hover:shadow-md transition card-hover group">
+          <div class="w-8 h-8 md:w-10 md:h-10 gradient-navy rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:scale-110 transition-transform">
+            <i class="fas fa-download text-white text-xs md:text-sm"></i>
+          </div>
+          <span class="text-[10px] md:text-xs font-semibold text-gray-600">Downloads</span>
+        </a>
+        
+        <!-- Departments -->
+        <a href="{% url 'departments' %}" class="bg-white rounded-xl shadow-sm p-2 md:p-3 text-center hover:shadow-md transition card-hover group">
+          <div class="w-8 h-8 md:w-10 md:h-10 gradient-navy rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:scale-110 transition-transform">
+            <i class="fas fa-building text-white text-xs md:text-sm"></i>
+          </div>
+          <span class="text-[10px] md:text-xs font-semibold text-gray-600">Departments</span>
+        </a>
+        
+        <!-- Contact -->
+        <a href="{% url 'contact' %}" class="bg-white rounded-xl shadow-sm p-2 md:p-3 text-center hover:shadow-md transition card-hover group">
+          <div class="w-8 h-8 md:w-10 md:h-10 gradient-navy rounded-lg flex items-center justify-center mx-auto mb-1 md:mb-2 group-hover:scale-110 transition-transform">
+            <i class="fas fa-envelope text-white text-xs md:text-sm"></i>
+          </div>
+          <span class="text-[10px] md:text-xs font-semibold text-gray-600">Contact</span>
+        </a>
+      </div>
+
+      <!-- Admission Applications -->
+      <div class="bg-white rounded-2xl shadow-md p-4 md:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <h3 class="font-bold text-navy-800 text-base md:text-lg flex items-center gap-2">
+            <i class="fas fa-file-signature text-yellow-400"></i> Admission Status
+          </h3>
+          <a href="{% url 'admissions' %}" class="px-3 py-2 gradient-navy text-white rounded-lg text-xs font-semibold hover:opacity-90 transition">Apply</a>
+        </div>
+        {% if admission_applications %}
+          <div class="space-y-3">
+            {% for app in admission_applications %}
+              <div class="rounded-xl border border-gray-100 p-3 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <div>
+                  <div class="font-semibold text-navy-800 text-sm">{{ app.program.name }}</div>
+                  <div class="text-xs text-gray-500">{{ app.application_number }} | {{ app.submitted_at|date:"M d, Y" }}</div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-1 rounded-full text-xs font-semibold {% if app.status == 'confirmed' %}bg-green-100 text-green-700{% elif app.status == 'rejected' %}bg-red-100 text-red-700{% elif app.status == 'waiting' %}bg-yellow-100 text-yellow-700{% else %}bg-blue-100 text-blue-700{% endif %}">{{ app.get_status_display }}</span>
+                  <a href="{% url 'admissions' %}?application={{ app.application_number }}" class="text-navy-600 text-xs font-semibold hover:text-navy-800">View Status</a>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="text-gray-500 text-sm">No admission application submitted yet.</p>
+        {% endif %}
+      </div>
+
+      <!-- Latest News -->
+      {% if news %}
+      <div class="bg-white rounded-2xl shadow-md p-4 md:p-6">
+        <h3 class="font-bold text-navy-800 text-base md:text-lg mb-4 flex items-center gap-2">
+          <i class="fas fa-newspaper text-yellow-400"></i> Latest News
+        </h3>
+        <div class="space-y-2 md:space-y-3">
+          {% for article in news|slice:":3" %}
+          <a href="{{ article.get_absolute_url }}" class="flex gap-3 p-2 md:p-3 rounded-xl hover:bg-gray-50 transition group">
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg overflow-hidden shrink-0">
+              {% if article.image %}
+                <img src="{{ article.image.url }}" alt="{{ article.title }}" class="w-full h-full object-cover">
+              {% else %}
+                <div class="w-full h-full bg-navy-100 flex items-center justify-center">
+                  <i class="fas fa-newspaper text-navy-400 text-xs md:text-sm"></i>
+                </div>
+              {% endif %}
+            </div>
+            <div class="flex-1 min-w-0">
+              <h4 class="font-medium text-navy-800 text-xs md:text-sm line-clamp-1 group-hover:text-navy-600 transition">{{ article.title }}</h4>
+              <p class="text-gray-400 text-[10px] md:text-xs mt-0.5">
+                <i class="far fa-calendar-alt mr-1"></i> {{ article.published_at|date:"M d, Y" }}
+              </p>
+            </div>
+            <i class="fas fa-chevron-right text-gray-300 self-center group-hover:text-navy-600 transition text-xs md:text-sm"></i>
+          </a>
+          {% endfor %}
+        </div>
+        <a href="{% url 'news' %}" class="block text-center mt-4 text-navy-600 text-xs md:text-sm font-semibold hover:text-navy-800 transition">
+          View All News <i class="fas fa-arrow-right ml-1"></i>
+        </a>
+      </div>
+      {% endif %}
+
+      <!-- Announcements -->
+      {% if announcements %}
+      <div class="bg-white rounded-2xl shadow-md p-4 md:p-6">
+        <h3 class="font-bold text-navy-800 text-base md:text-lg mb-4 flex items-center gap-2">
+          <i class="fas fa-bullhorn text-yellow-400"></i> Announcements
+        </h3>
+        <div class="space-y-2 md:space-y-3">
+          {% for ann in announcements|slice:":3" %}
+          <div class="flex items-start gap-3 p-2 md:p-3 rounded-xl {% if ann.priority == 'urgent' %}bg-red-50 border border-red-100{% elif ann.priority == 'important' %}bg-yellow-50 border border-yellow-100{% else %}bg-gray-50{% endif %}">
+            <i class="fas fa-bullhorn {% if ann.priority == 'urgent' %}text-red-500{% elif ann.priority == 'important' %}text-yellow-500{% else %}text-navy-500{% endif %} mt-0.5 text-xs md:text-sm"></i>
+            <div class="flex-1 min-w-0">
+              <h4 class="font-medium text-navy-800 text-xs md:text-sm">{{ ann.title }}</h4>
+              <p class="text-gray-500 text-[10px] md:text-xs mt-0.5">
+                <i class="far fa-clock mr-1"></i> {{ ann.created_at|date:"M d, Y" }}
+              </p>
+            </div>
+            {% if ann.is_pinned %}
+              <span class="text-yellow-500"><i class="fas fa-thumbtack text-xs md:text-sm"></i></span>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        <a href="{% url 'announcements' %}" class="block text-center mt-4 text-navy-600 text-xs md:text-sm font-semibold hover:text-navy-800 transition">
+          View All <i class="fas fa-arrow-right ml-1"></i>
+        </a>
+      </div>
+      {% endif %}
+
+      <!-- Downloads -->
+      {% if downloads %}
+      <div class="bg-white rounded-2xl shadow-md p-4 md:p-6">
+        <h3 class="font-bold text-navy-800 text-base md:text-lg mb-4 flex items-center gap-2">
+          <i class="fas fa-download text-yellow-400"></i> Available Downloads
+        </h3>
+        <div class="space-y-2">
+          {% for dl in downloads|slice:":3" %}
+          <a href="{% url 'downloads' %}" class="flex items-center gap-3 p-2 md:p-3 rounded-xl hover:bg-gray-50 transition group">
+            <div class="w-7 h-7 md:w-9 md:h-9 bg-red-50 rounded-lg flex items-center justify-center shrink-0">
+              <i class="fas fa-file-pdf text-red-500 text-xs md:text-sm"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs md:text-sm font-medium text-navy-800 line-clamp-1 group-hover:text-navy-600 transition">{{ dl.title }}</h4>
+              {% if dl.file_size %}
+                <span class="text-gray-400 text-[10px] md:text-xs">{{ dl.file_size|filesizeformat }}</span>
+              {% endif %}
+            </div>
+            <i class="fas fa-download text-gray-400 group-hover:text-navy-600 transition text-xs md:text-sm"></i>
+          </a>
+          {% endfor %}
+        </div>
+        <a href="{% url 'downloads' %}" class="block text-center mt-4 text-navy-600 text-xs md:text-sm font-semibold hover:text-navy-800 transition">
+          View All Downloads <i class="fas fa-arrow-right ml-1"></i>
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add responsive behavior if needed
+    console.log('Student dashboard loaded');
+  });
+</script>
+{% endblock %}

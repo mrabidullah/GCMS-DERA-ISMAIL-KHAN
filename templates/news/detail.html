@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}{{ article.title }} – {{ site_settings.site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-12">
+  <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6"><a href="{% url 'home' %}" class="hover:text-navy-600">Home</a><i class="fas fa-chevron-right text-xs"></i><a href="{% url 'news' %}" class="hover:text-navy-600">News</a><i class="fas fa-chevron-right text-xs"></i><span class="text-navy-800">{{ article.title|truncatewords:6 }}</span></nav>
+  <article class="bg-white rounded-3xl shadow-xl overflow-hidden">
+    {% if article.image %}<img src="{{ article.image.url }}" alt="{{ article.title }}" class="w-full h-80 object-cover" loading="lazy">{% endif %}
+    <div class="p-8 md:p-12">
+      <div class="flex flex-wrap gap-2 mb-4">{% if article.category %}<span class="bg-yellow-100 text-yellow-700 text-xs font-bold px-3 py-1 rounded-full">{{ article.category.name }}</span>{% endif %}{% if article.is_featured %}<span class="bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-full"><i class="fas fa-star mr-1"></i>Featured</span>{% endif %}</div>
+      <h1 class="text-3xl md:text-4xl font-bold text-navy-800 mb-4">{{ article.title }}</h1>
+      <div class="flex items-center gap-4 text-gray-500 text-sm mb-8 pb-6 border-b border-gray-100"><span><i class="fas fa-calendar mr-2"></i>{{ article.published_at|date:"F d, Y" }}</span></div>
+      <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed">{{ article.content|linebreaks }}</div>
+    </div>
+  </article>
+  {% if related %}<div class="mt-12"><h2 class="text-2xl font-bold text-navy-800 mb-6">Related News</h2><div class="grid md:grid-cols-3 gap-6">{% for art in related %}<a href="{{ art.get_absolute_url }}" class="card-hover bg-white rounded-xl shadow-md overflow-hidden group">{% if art.image %}<div class="h-36 overflow-hidden"><img src="{{ art.image.url }}" alt="{{ art.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"></div>{% endif %}<div class="p-4"><h3 class="font-semibold text-navy-800 text-sm line-clamp-2 group-hover:text-navy-600 transition">{{ art.title }}</h3><p class="text-gray-400 text-xs mt-2">{{ art.published_at|date:"M d, Y" }}</p></div></a>{% endfor %}</div></div>{% endif %}
+</div>
+{% endblock %}

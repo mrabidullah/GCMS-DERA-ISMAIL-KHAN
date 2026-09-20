@@ -1,0 +1,40 @@
+{% extends 'dashboard/base.html' %}
+{% block page_heading %}Hero Section{% endblock %}
+{% block page_subheading %}Manage homepage hero slides{% endblock %}
+{% block content %}
+<div class="grid lg:grid-cols-2 gap-6">
+  <!-- Add Slide Form -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+    <h3 class="font-bold text-navy-800 mb-5 flex items-center gap-2"><i class="fas fa-plus-circle text-yellow-400"></i> Add New Slide</h3>
+    <form method="POST" enctype="multipart/form-data" class="space-y-4">
+      {% csrf_token %}<input type="hidden" name="action" value="create">
+      <div><label class="block text-sm font-semibold text-gray-700 mb-1">Title *</label><input type="text" name="title" required class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none transition" placeholder="Slide title"></div>
+      <div><label class="block text-sm font-semibold text-gray-700 mb-1">Subtitle</label><input type="text" name="subtitle" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none transition"></div>
+      <div><label class="block text-sm font-semibold text-gray-700 mb-1">Description</label><textarea name="description" rows="3" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none transition"></textarea></div>
+      <div><label class="block text-sm font-semibold text-gray-700 mb-1">Background Image</label><input type="file" name="background_image" accept="image/*" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Button Text</label><input type="text" name="button_text" value="Learn More" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Button Link</label><input type="text" name="button_link" value="#" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Button 2 Text</label><input type="text" name="button2_text" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Button 2 Link</label><input type="text" name="button2_link" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Order</label><input type="number" name="order" value="0" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div class="flex items-center gap-2 pt-5"><input type="checkbox" name="is_active" id="is_active" checked class="w-4 h-4 text-navy-600"><label for="is_active" class="text-sm font-semibold text-gray-700">Active</label></div>
+      </div>
+      <button type="submit" class="w-full py-3 gradient-navy text-white font-semibold rounded-xl hover:opacity-90 transition"><i class="fas fa-plus mr-2"></i>Add Slide</button>
+    </form>
+  </div>
+  <!-- Slides List -->
+  <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+    <h3 class="font-bold text-navy-800 mb-5 flex items-center gap-2"><i class="fas fa-list text-yellow-400"></i> Current Slides ({{ slides.count }})</h3>
+    {% if slides %}<div class="space-y-3">{% for slide in slides %}
+    <div class="flex items-center gap-3 p-3 rounded-xl border {% if slide.is_active %}border-green-200 bg-green-50{% else %}border-gray-200 bg-gray-50{% endif %}">
+      <div class="flex-1 min-w-0"><h4 class="font-semibold text-navy-800 text-sm truncate">{{ slide.title }}</h4><p class="text-gray-500 text-xs mt-0.5">Order: {{ slide.order }} | {% if slide.is_active %}<span class="text-green-600">Active</span>{% else %}<span class="text-gray-400">Inactive</span>{% endif %}</p></div>
+      <div class="flex gap-1 shrink-0">
+        <form method="POST">{% csrf_token %}<input type="hidden" name="action" value="toggle"><input type="hidden" name="slide_id" value="{{ slide.pk }}"><button type="submit" class="w-8 h-8 {% if slide.is_active %}bg-yellow-100 text-yellow-600{% else %}bg-gray-200 text-gray-500{% endif %} rounded-lg hover:opacity-80 transition text-xs"><i class="fas fa-{% if slide.is_active %}eye{% else %}eye-slash{% endif %}"></i></button></form>
+        <form method="POST">{% csrf_token %}<input type="hidden" name="action" value="delete"><input type="hidden" name="slide_id" value="{{ slide.pk }}"><button type="submit" class="w-8 h-8 bg-red-50 text-red-500 rounded-lg hover:bg-red-100 transition text-xs" onclick="return confirm('Delete this slide?')"><i class="fas fa-trash"></i></button></form>
+      </div>
+    </div>
+    {% endfor %}</div>{% else %}<div class="text-center py-8 text-gray-400"><i class="fas fa-images text-4xl mb-3 block"></i><p class="text-sm">No slides yet</p></div>{% endif %}
+  </div>
+</div>
+{% endblock %}

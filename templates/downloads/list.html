@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="gradient-navy py-16"><div class="max-w-7xl mx-auto px-4 text-center text-white"><h1 class="text-4xl font-bold mb-2">Downloads</h1><p class="text-gray-300">Access notices, forms, and important documents</p></div></div>
+<div class="max-w-5xl mx-auto px-4 py-12">
+  {% if categories %}<div class="flex flex-wrap gap-2 mb-8"><a href="{% url 'downloads' %}" class="px-4 py-2 {% if not cat_slug %}gradient-navy text-white{% else %}bg-white border border-gray-200 text-gray-600 hover:border-navy-400{% endif %} rounded-full text-sm font-medium transition">All</a>{% for cat in categories %}<a href="?category={{ cat.slug }}" class="px-4 py-2 {% if cat_slug == cat.slug %}gradient-navy text-white{% else %}bg-white border border-gray-200 text-gray-600 hover:border-navy-400{% endif %} rounded-full text-sm font-medium transition">{{ cat.name }}</a>{% endfor %}</div>{% endif %}
+  <div class="space-y-3">
+    {% for dl in files %}
+    <div class="bg-white rounded-2xl shadow-md p-5 flex items-center gap-4 hover:shadow-lg transition">
+      <div class="w-12 h-12 {% if dl.get_extension == 'PDF' %}bg-red-50{% elif dl.get_extension == 'DOCX' or dl.get_extension == 'DOC' %}bg-blue-50{% elif dl.get_extension == 'XLSX' or dl.get_extension == 'XLS' %}bg-green-50{% else %}bg-gray-50{% endif %} rounded-xl flex items-center justify-center shrink-0">
+        <i class="fas {% if dl.get_extension == 'PDF' %}fa-file-pdf text-red-500{% elif dl.get_extension == 'DOCX' or dl.get_extension == 'DOC' %}fa-file-word text-blue-500{% elif dl.get_extension == 'XLSX' or dl.get_extension == 'XLS' %}fa-file-excel text-green-500{% else %}fa-file text-gray-500{% endif %} text-xl"></i>
+      </div>
+      <div class="flex-1 min-w-0">
+        <h3 class="font-semibold text-navy-800">{{ dl.title }}</h3>
+        {% if dl.description %}<p class="text-gray-500 text-sm mt-0.5">{{ dl.description }}</p>{% endif %}
+        <div class="flex items-center gap-4 mt-1 text-xs text-gray-400">{% if dl.category %}<span><i class="fas fa-folder mr-1"></i>{{ dl.category.name }}</span>{% endif %}<span><i class="fas fa-download mr-1"></i>{{ dl.download_count }} downloads</span><span>{{ dl.created_at|date:"M d, Y" }}</span></div>
+      </div>
+      <a href="/downloads/download/{{ dl.pk }}/" class="px-5 py-2.5 gradient-navy text-white text-sm font-semibold rounded-xl hover:opacity-90 transition shrink-0"><i class="fas fa-download mr-1"></i> Download</a>
+    </div>
+    {% empty %}<div class="text-center py-16 text-gray-400"><i class="fas fa-folder-open text-5xl mb-4 block"></i><p>No files available yet.</p></div>{% endfor %}
+  </div>
+</div>
+{% endblock %}

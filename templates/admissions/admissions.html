@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="gradient-navy py-16"><div class="max-w-7xl mx-auto px-4 text-center text-white"><h1 class="text-4xl font-bold mb-2">Admissions</h1><p class="text-gray-300">Begin your academic journey at GCMS</p></div></div>
+<div class="max-w-7xl mx-auto px-4 py-16">
+  {% if application %}
+    {% include 'admissions/_application_print.html' with application=application %}
+  {% endif %}
+
+  {% if info %}<div class="bg-white rounded-2xl shadow-md p-8 mb-10 border-l-4 border-yellow-400"><div class="flex flex-wrap items-start justify-between gap-4"><div class="flex-1"><h2 class="text-2xl font-bold text-navy-800 mb-2">{{ info.title }}</h2>{% if info.session %}<p class="text-yellow-600 font-medium text-sm mb-3"><i class="fas fa-calendar mr-2"></i>Session: {{ info.session }}</p>{% endif %}<div class="text-gray-600 leading-relaxed">{{ info.content|linebreaks }}</div></div>{% if info.last_date %}<div class="bg-red-50 border border-red-200 rounded-xl px-6 py-4 text-center"><p class="text-red-600 font-bold text-sm">Last Date</p><p class="text-red-700 font-bold text-2xl mt-1">{{ info.last_date|date:"M d, Y" }}</p></div>{% endif %}</div></div>{% endif %}
+  <div class="grid lg:grid-cols-3 gap-8 mb-12">
+    <div class="lg:col-span-2 bg-white rounded-2xl shadow-md p-6 md:p-8 border border-gray-100">
+      <h2 class="text-2xl font-bold text-navy-800 mb-2">Apply for Admission</h2>
+      <p class="text-gray-500 text-sm mb-6">For two-year programs, diplomas, certificates, and other active GCMS programs.</p>
+      <form method="POST" enctype="multipart/form-data" class="grid md:grid-cols-2 gap-4">
+        {% csrf_token %}
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Program *</label><select name="program" required class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"><option value="">Select program</option>{% for prog in form_programs %}<option value="{{ prog.pk }}">{{ prog.name }}{% if prog.duration %} - {{ prog.duration }}{% endif %}</option>{% empty %}<option value="">No two-year/diploma programs available</option>{% endfor %}</select></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Preferred Department</label><select name="preferred_department" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"><option value="">Select department</option>{% for dept in departments %}<option value="{{ dept.pk }}">{{ dept.name }}</option>{% endfor %}</select></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Student Name *</label><input type="text" name="applicant_name" required value="{{ user.get_full_name }}" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Father Name *</label><input type="text" name="father_name" required class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">CNIC/B-Form *</label><input type="text" name="cnic_or_bform" required class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Phone *</label><input type="text" name="phone" required value="{{ user.phone }}" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Email</label><input type="email" name="email" value="{{ user.email }}" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Date of Birth</label><input type="date" name="date_of_birth" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Gender</label><select name="gender" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"><option value="">Select gender</option><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Student Photo</label><input type="file" name="photo" accept="image/*" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Previous School/College</label><input type="text" name="previous_school" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Board/University</label><input type="text" name="board_or_university" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Obtained Marks *</label><input type="number" min="0" name="obtained_marks" required class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Total Marks *</label><input type="number" min="1" name="total_marks" value="1100" required class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div class="md:col-span-2"><label class="block text-sm font-semibold text-gray-700 mb-1">Address *</label><textarea name="address" rows="3" required class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none">{{ user.address }}</textarea></div>
+        <div class="md:col-span-2"><button type="submit" class="px-6 py-3 gradient-navy text-white rounded-xl hover:opacity-90 transition font-semibold text-sm"><i class="fas fa-paper-plane mr-1"></i> Submit Application</button></div>
+      </form>
+    </div>
+    <div class="bg-white rounded-2xl shadow-md p-6 md:p-8 border border-gray-100 h-fit">
+      <h2 class="text-xl font-bold text-navy-800 mb-2">Check Status</h2>
+      <p class="text-gray-500 text-sm mb-5">Use your GCMS application number to check if your admission is confirmed, waiting, pending, or rejected.</p>
+      <form method="POST" action="{% url 'admission_status' %}" class="space-y-4">
+        {% csrf_token %}
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Application Number</label><input type="text" name="application_number" required class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none" placeholder="GCMS-K7P4-X9Q2"></div>
+        <button class="w-full px-5 py-3 bg-yellow-400 text-navy-900 rounded-xl hover:bg-yellow-300 transition font-semibold text-sm"><i class="fas fa-check-circle mr-1"></i> Check Admission</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="text-center mb-12"><h2 class="text-2xl font-bold text-navy-800 mb-4">Academic Programs</h2><div class="flex flex-wrap justify-center gap-3"><a href="{% url 'programs' %}" class="px-6 py-3 gradient-navy text-white rounded-xl hover:opacity-90 transition font-semibold text-sm">View All Programs</a></div></div>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for prog in programs %}<a href="/admissions/programs/{{ prog.slug }}/" class="card-hover bg-white rounded-2xl shadow-md p-6 border border-gray-100 group"><div class="w-12 h-12 gradient-navy rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-graduation-cap text-white"></i></div><div class="flex items-center gap-2 mb-2"><h3 class="font-bold text-navy-800 group-hover:text-navy-600 transition">{{ prog.name }}</h3><span class="text-xs bg-navy-100 text-navy-700 px-2 py-0.5 rounded-full">{{ prog.get_level_display }}</span></div>{% if prog.duration %}<p class="text-gray-500 text-sm"><i class="fas fa-clock mr-1 text-yellow-500"></i>{{ prog.duration }}</p>{% endif %}{% if prog.seats %}<p class="text-gray-500 text-sm"><i class="fas fa-users mr-1 text-navy-400"></i>{{ prog.seats }} Seats</p>{% endif %}</a>{% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="gradient-navy py-16"><div class="max-w-7xl mx-auto px-4 text-center text-white"><h1 class="text-4xl font-bold mb-2">Departments</h1><p class="text-gray-300">Explore our academic departments</p><nav class="flex items-center justify-center gap-2 text-sm mt-4 text-gray-400"><a href="{% url 'home' %}" class="hover:text-yellow-300">Home</a><i class="fas fa-chevron-right text-xs"></i><span class="text-yellow-300">Departments</span></nav></div></div>
+<div class="max-w-7xl mx-auto px-4 py-16">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for dept in departments %}
+    <a href="{{ dept.get_absolute_url }}" class="group card-hover bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
+      {% if dept.image %}<div class="h-48 overflow-hidden"><img src="{{ dept.image.url }}" alt="{{ dept.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"></div>{% else %}<div class="h-48 gradient-navy flex items-center justify-center"><i class="fas fa-building text-white opacity-20 text-6xl"></i></div>{% endif %}
+      <div class="p-6">
+        <div class="flex items-center gap-2 mb-3">
+          <h3 class="font-bold text-navy-800 text-xl group-hover:text-navy-600 transition">{{ dept.name }}</h3>
+          {% if dept.short_name %}<span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded-full">{{ dept.short_name }}</span>{% endif %}
+        </div>
+        {% if dept.hod_name %}<p class="text-gray-500 text-sm mb-3"><i class="fas fa-user-tie mr-2 text-navy-400"></i>HOD: {{ dept.hod_name }}</p>{% endif %}
+        {% if dept.description %}<p class="text-gray-600 text-sm line-clamp-2 mb-4">{{ dept.description }}</p>{% endif %}
+        <span class="text-navy-600 font-semibold text-sm group-hover:text-navy-800 transition flex items-center gap-1">View Department <i class="fas fa-arrow-right text-xs"></i></span>
+      </div>
+    </a>
+    {% empty %}
+    <div class="col-span-3 text-center py-16 text-gray-400"><i class="fas fa-building text-5xl mb-4 block"></i><p>No departments found.</p></div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

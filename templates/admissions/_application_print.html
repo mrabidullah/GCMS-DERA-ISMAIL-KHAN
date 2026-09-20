@@ -1,0 +1,343 @@
+{% load static %}
+<style>
+  @media print {
+    @page {
+      size: A4 portrait;
+      margin: 8mm;
+    }
+
+    html,
+    body {
+      width: auto !important;
+      min-height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #ffffff !important;
+    }
+
+    body > *:not(main),
+    main > *:not(:has(.admission-slip)),
+    main > *:has(.admission-slip) > *:not(.admission-slip) {
+      display: none !important;
+    }
+
+    main,
+    main > *:has(.admission-slip) {
+      display: block !important;
+      width: auto !important;
+      max-width: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #ffffff !important;
+    }
+
+    .admission-slip {
+      display: block !important;
+      position: static !important;
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      border: 1px solid #cfd6e2 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      overflow: hidden !important;
+      background: #ffffff !important;
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+
+    .admission-print-header {
+      background: #ffffff !important;
+      color: #0b1f4d !important;
+      border-bottom: 2px solid #0b1f4d !important;
+      padding: 7mm 8mm 5mm !important;
+    }
+
+    .admission-print-header *,
+    .admission-print-dark {
+      color: #0b1f4d !important;
+    }
+
+    .admission-print-logo {
+      width: 16mm !important;
+      height: 16mm !important;
+      border: 1px solid #cfd6e2 !important;
+      padding: 1mm !important;
+    }
+
+    .admission-print-body {
+      padding: 5mm 8mm 6mm !important;
+    }
+
+    .admission-print-photo {
+      width: 38mm !important;
+      height: 48mm !important;
+      object-fit: cover !important;
+    }
+
+    .admission-print-photo-box {
+      width: 42mm !important;
+      padding: 2mm !important;
+      flex: 0 0 42mm !important;
+    }
+
+    .admission-print-main {
+      display: flex !important;
+      gap: 5mm !important;
+      align-items: flex-start !important;
+    }
+
+    .admission-print-details {
+      flex: 1 1 auto !important;
+      min-width: 0 !important;
+    }
+
+    .admission-print-grid {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 2.5mm !important;
+    }
+
+    .admission-print-two {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 4mm !important;
+      margin-top: 4mm !important;
+    }
+
+    .admission-print-card {
+      padding: 2.2mm 2.6mm !important;
+      border: 1px solid #dfe5ee !important;
+      border-radius: 2mm !important;
+      background: #ffffff !important;
+    }
+
+    .admission-print-label {
+      font-size: 6.8pt !important;
+      line-height: 1.1 !important;
+    }
+
+    .admission-print-value,
+    .admission-print-text {
+      font-size: 8.2pt !important;
+      line-height: 1.22 !important;
+    }
+
+    .admission-print-section-title {
+      font-size: 8.5pt !important;
+      margin-bottom: 2mm !important;
+    }
+
+    .admission-print-heading {
+      font-size: 16pt !important;
+      line-height: 1.1 !important;
+    }
+
+    .admission-print-small {
+      font-size: 8pt !important;
+    }
+
+    .admission-print-footer {
+      margin-top: 6mm !important;
+      gap: 14mm !important;
+      font-size: 8pt !important;
+    }
+
+    .admission-print-actions {
+      display: none !important;
+    }
+
+    .admission-no-print {
+      display: none !important;
+    }
+  }
+</style>
+
+<section class="admission-slip bg-white border border-gray-200 rounded-2xl shadow-md overflow-hidden mb-10">
+  <div class="admission-print-header gradient-navy text-white px-6 md:px-8 py-6">
+    <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+      <div class="flex items-center gap-4 min-w-0">
+        <img src="{% static 'img/gcms-logo.jpeg' %}" alt="GCMS logo" class="admission-print-logo w-16 h-16 rounded-full bg-white object-cover p-1 flex-none">
+        <div class="min-w-0">
+          <div class="admission-print-small text-xs font-extrabold uppercase tracking-wider text-gray-300">{{ site_settings.site_name|default:"Government College of Management Sciences" }}</div>
+          <h2 class="admission-print-heading text-2xl md:text-3xl font-black leading-tight text-white mt-1 break-words">Admission Application</h2>
+          <div class="admission-print-small text-sm text-gray-300 mt-1">Application No: <strong class="admission-print-dark text-white">{{ application.application_number }}</strong></div>
+        </div>
+      </div>
+      <div class="admission-print-actions flex flex-wrap items-center gap-2 lg:justify-end">
+        <span class="inline-flex h-10 items-center justify-center gap-2 px-4 rounded-full text-sm font-black leading-none whitespace-nowrap {% if application.status == 'confirmed' %}bg-green-100 text-green-700{% elif application.status == 'rejected' %}bg-red-100 text-red-700{% elif application.status == 'waiting' %}bg-yellow-100 text-yellow-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+          {% if application.status == 'confirmed' %}
+            <i class="fas fa-check-circle"></i>
+          {% elif application.status == 'rejected' %}
+            <i class="fas fa-times-circle"></i>
+          {% elif application.status == 'waiting' %}
+            <i class="fas fa-clock"></i>
+          {% else %}
+            <i class="fas fa-info-circle"></i>
+          {% endif %}
+          {{ application.get_status_display }}
+        </span>
+        <button type="button" onclick="window.print()" class="admission-no-print inline-flex h-10 items-center justify-center gap-2 px-4 bg-yellow-400 text-navy-900 border-2 border-yellow-300 rounded-xl hover:bg-yellow-300 transition font-black text-sm leading-none whitespace-nowrap">
+          <i class="fas fa-print mr-1"></i> Print
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="admission-print-body p-6 md:p-8">
+    <div class="admission-print-main grid lg:grid-cols-3 gap-6 items-start">
+      <aside class="admission-print-photo-box bg-gray-50 border border-gray-200 rounded-xl p-3">
+        {% if application.photo %}
+          <img src="{{ application.photo.url }}" alt="{{ application.applicant_name }}" class="admission-print-photo w-full h-64 md:h-72 object-cover rounded-lg bg-gray-100">
+        {% elif application.user and application.user.profile_picture %}
+          <img src="{{ application.user.profile_picture.url }}" alt="{{ application.applicant_name }}" class="admission-print-photo w-full h-64 md:h-72 object-cover rounded-lg bg-gray-100">
+        {% else %}
+          <div class="admission-print-photo w-full h-64 md:h-72 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
+            <i class="fas fa-user text-4xl"></i>
+          </div>
+        {% endif %}
+        <div class="admission-print-text text-center text-xs font-extrabold text-gray-500 mt-3">{{ application.applicant_name }}</div>
+      </aside>
+
+      <div class="admission-print-details lg:col-span-2 min-w-0">
+        <h3 class="admission-print-section-title flex items-center gap-2 text-sm font-black text-navy-800 uppercase tracking-wide mb-3">
+          <span class="w-1 h-5 rounded-full bg-yellow-400"></span>
+          Student Information
+        </h3>
+        <div class="admission-print-grid grid md:grid-cols-2 gap-3">
+          <div class="admission-print-card bg-gray-50 rounded-xl p-3 border border-gray-100">
+            <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Student Name</div>
+            <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.applicant_name }}</div>
+          </div>
+          <div class="admission-print-card bg-gray-50 rounded-xl p-3 border border-gray-100">
+            <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Father Name</div>
+            <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.father_name }}</div>
+          </div>
+          <div class="admission-print-card bg-gray-50 rounded-xl p-3 border border-gray-100">
+            <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">CNIC/B-Form</div>
+            <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.cnic_or_bform }}</div>
+          </div>
+          <div class="admission-print-card bg-gray-50 rounded-xl p-3 border border-gray-100">
+            <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Phone</div>
+            <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.phone }}</div>
+          </div>
+          <div class="admission-print-card bg-gray-50 rounded-xl p-3 border border-gray-100">
+            <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Email</div>
+            <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.email|default:"Not provided" }}</div>
+          </div>
+          <div class="admission-print-card bg-gray-50 rounded-xl p-3 border border-gray-100">
+            <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Date of Birth</div>
+            <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.date_of_birth|date:"M d, Y"|default:"Not provided" }}</div>
+          </div>
+          <div class="admission-print-card bg-gray-50 rounded-xl p-3 border border-gray-100">
+            <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Gender</div>
+            <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.get_gender_display|default:"Not provided" }}</div>
+          </div>
+          <div class="admission-print-card bg-gray-50 rounded-xl p-3 border border-gray-100">
+            <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Submitted</div>
+            <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.submitted_at|date:"M d, Y h:i A" }}</div>
+          </div>
+          <div class="admission-print-card md:col-span-2 bg-gray-50 rounded-xl p-3 border border-gray-100">
+            <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Address</div>
+            <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.address|linebreaksbr }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="admission-print-two grid md:grid-cols-2 gap-5 mt-6">
+      <div>
+        <h3 class="admission-print-section-title flex items-center gap-2 text-sm font-black text-navy-800 uppercase tracking-wide mb-3">
+          <span class="w-1 h-5 rounded-full bg-yellow-400"></span>
+          Program Details
+        </h3>
+        <div class="grid gap-3">
+          <div class="admission-print-card bg-gray-50 rounded-xl p-3 border border-gray-100">
+            <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Program</div>
+            <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.program.name }}</div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="admission-print-card bg-gray-50 rounded-xl p-3 border border-gray-100">
+              <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Level</div>
+              <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.program.get_level_display }}</div>
+            </div>
+            <div class="admission-print-card bg-gray-50 rounded-xl p-3 border border-gray-100">
+              <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Duration</div>
+              <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.program.duration|default:"Not provided" }}</div>
+            </div>
+          </div>
+          <div class="admission-print-card bg-gray-50 rounded-xl p-3 border border-gray-100">
+            <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Preferred Department</div>
+            <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.preferred_department.name|default:"No department selected" }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="admission-print-section-title flex items-center gap-2 text-sm font-black text-navy-800 uppercase tracking-wide mb-3">
+          <span class="w-1 h-5 rounded-full bg-yellow-400"></span>
+          Academic Record
+        </h3>
+        <div class="grid gap-3">
+          <div class="admission-print-card bg-gray-50 rounded-xl p-3 border border-gray-100">
+            <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Previous School/College</div>
+            <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.previous_school|default:"Not provided" }}</div>
+          </div>
+          <div class="admission-print-card bg-gray-50 rounded-xl p-3 border border-gray-100">
+            <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Board/University</div>
+            <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.board_or_university|default:"Not provided" }}</div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="admission-print-card bg-gray-50 rounded-xl p-3 border border-gray-100">
+              <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Marks</div>
+              <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.obtained_marks }}/{{ application.total_marks }}</div>
+            </div>
+            <div class="admission-print-card bg-gray-50 rounded-xl p-3 border border-gray-100">
+              <div class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Merit</div>
+              <div class="admission-print-value text-sm font-bold text-gray-800 mt-1">{{ application.merit_percentage }}%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <h3 class="admission-print-section-title flex items-center gap-2 text-sm font-black text-navy-800 uppercase tracking-wide mb-3">
+        <span class="w-1 h-5 rounded-full bg-yellow-400"></span>
+        Admission Decision
+      </h3>
+      <div class="admission-print-card bg-yellow-50 border-l-4 border-yellow-400 rounded-xl p-4">
+        <div class="flex items-center justify-between gap-4 border-b border-gray-200 pb-2 mb-2">
+          <span class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Current Status</span>
+          <strong class="admission-print-value inline-flex items-center gap-2 text-sm {% if application.status == 'confirmed' %}text-green-700{% elif application.status == 'rejected' %}text-red-700{% elif application.status == 'waiting' %}text-yellow-700{% else %}text-blue-700{% endif %}">
+            {% if application.status == 'confirmed' %}
+              <i class="fas fa-check-circle"></i>
+            {% elif application.status == 'rejected' %}
+              <i class="fas fa-times-circle"></i>
+            {% elif application.status == 'waiting' %}
+              <i class="fas fa-clock"></i>
+            {% else %}
+              <i class="fas fa-info-circle"></i>
+            {% endif %}
+            {{ application.get_status_display }}
+          </strong>
+        </div>
+        {% if application.reviewed_at %}
+          <div class="flex items-center justify-between gap-4 border-b border-gray-200 pb-2 mb-2">
+            <span class="admission-print-label text-xs text-gray-500 font-extrabold uppercase">Reviewed</span>
+            <strong class="admission-print-value text-sm text-gray-800">{{ application.reviewed_at|date:"M d, Y h:i A" }}</strong>
+          </div>
+        {% endif %}
+        <div class="admission-print-text text-sm text-gray-700">
+          <strong>Office Notes:</strong>
+          {{ application.admin_notes|default:"No additional notes yet."|linebreaksbr }}
+        </div>
+      </div>
+    </div>
+
+    <div class="admission-print-footer grid grid-cols-2 gap-8 mt-8 text-xs text-gray-500">
+      <div class="border-t border-gray-800 pt-2 text-center font-extrabold">Admissions Office Signature</div>
+      <div class="border-t border-gray-800 pt-2 text-center font-extrabold">Principal / Authorized Signature</div>
+    </div>
+  </div>
+</section>

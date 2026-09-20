@@ -1,0 +1,49 @@
+{% extends 'dashboard/base.html' %}
+{% block page_heading %}Site Settings{% endblock %}
+{% block content %}
+<div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 max-w-4xl">
+  <form method="POST" enctype="multipart/form-data" class="space-y-8">
+    {% csrf_token %}
+    <div>
+      <h3 class="font-bold text-navy-800 text-lg mb-4 pb-2 border-b border-gray-100 flex items-center gap-2"><i class="fas fa-globe text-yellow-400"></i> General</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Site Name</label><input type="text" name="site_name" value="{{ site.site_name }}" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Site Tagline</label><input type="text" name="site_tagline" value="{{ site.site_tagline }}" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div class="sm:col-span-2"><label class="block text-sm font-semibold text-gray-700 mb-1">Site Logo</label><input type="file" name="site_logo" accept="image/*" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm">{% if site.site_logo %}<p class="text-xs text-gray-500 mt-1">Current: <a href="{{ site.site_logo.url }}" class="text-navy-600">View</a></p>{% endif %}</div>
+      </div>
+    </div>
+    <div>
+      <h3 class="font-bold text-navy-800 text-lg mb-4 pb-2 border-b border-gray-100 flex items-center gap-2"><i class="fas fa-phone text-yellow-400"></i> Contact</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Contact Email</label><input type="email" name="contact_email" value="{{ site.contact_email }}" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Phone 1</label><input type="tel" name="contact_phone" value="{{ site.contact_phone }}" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Phone 2</label><input type="tel" name="contact_phone2" value="{{ site.contact_phone2 }}" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Office Hours</label><input type="text" name="office_hours" value="{{ site.office_hours }}" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div class="sm:col-span-2"><label class="block text-sm font-semibold text-gray-700 mb-1">Address</label><textarea name="contact_address" rows="2" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none">{{ site.contact_address }}</textarea></div>
+        <div class="sm:col-span-2"><label class="block text-sm font-semibold text-gray-700 mb-1">Google Maps Embed Code</label><textarea name="google_map_embed" rows="3" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none font-mono text-xs" placeholder="<iframe ...></iframe>">{{ site.google_map_embed }}</textarea></div>
+      </div>
+    </div>
+    <div>
+      <h3 class="font-bold text-navy-800 text-lg mb-4 pb-2 border-b border-gray-100 flex items-center gap-2"><i class="fab fa-facebook text-yellow-400"></i> Social Media</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1"><i class="fab fa-facebook mr-1 text-blue-600"></i> Facebook</label><input type="url" name="facebook_url" value="{{ site.facebook_url }}" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none" placeholder="https://facebook.com/..."></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1"><i class="fab fa-twitter mr-1 text-blue-400"></i> Twitter</label><input type="url" name="twitter_url" value="{{ site.twitter_url }}" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1"><i class="fab fa-youtube mr-1 text-red-600"></i> YouTube</label><input type="url" name="youtube_url" value="{{ site.youtube_url }}" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1"><i class="fab fa-instagram mr-1 text-pink-600"></i> Instagram</label><input type="url" name="instagram_url" value="{{ site.instagram_url }}" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+      </div>
+    </div>
+    <div>
+      <h3 class="font-bold text-navy-800 text-lg mb-4 pb-2 border-b border-gray-100 flex items-center gap-2"><i class="fas fa-star text-yellow-400"></i> Admission Banner</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="flex items-center gap-2 pt-2"><input type="checkbox" name="is_admission_open" id="admission_open" {% if site.is_admission_open %}checked{% endif %} class="w-4 h-4"><label for="admission_open" class="text-sm font-semibold text-gray-700">Admissions Are Open</label></div>
+        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Banner Text</label><input type="text" name="admission_banner_text" value="{{ site.admission_banner_text }}" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none"></div>
+      </div>
+    </div>
+    <div>
+      <h3 class="font-bold text-navy-800 text-lg mb-4 pb-2 border-b border-gray-100 flex items-center gap-2"><i class="fas fa-align-left text-yellow-400"></i> Footer</h3>
+      <div><label class="block text-sm font-semibold text-gray-700 mb-1">Footer Text</label><textarea name="footer_text" rows="3" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:border-navy-500 focus:outline-none">{{ site.footer_text }}</textarea></div>
+    </div>
+    <button type="submit" class="px-10 py-3.5 gradient-navy text-white font-bold rounded-xl hover:opacity-90 transition shadow-lg"><i class="fas fa-save mr-2"></i>Save Settings</button>
+  </form>
+</div>
+{% endblock %}

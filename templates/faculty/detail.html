@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block extra_head %}
+{% endblock %}
+{% block content %}
+
+<!-- ============================================================
+     Faculty Profile — matches the "editorial letterhead" identity
+     used across Principal's Message pages.
+============================================================= -->
+
+{% if member.department %}
+  {% comment %}
+    Structured data helps this page surface correctly in search results
+    (Google's rich results for "Person" / staff directory entries).
+  {% endcomment %}
+{% endif %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "{{ member.name|escapejs }}",
+  "jobTitle": "{{ member.designation|escapejs }}"
+  {% if member.department %},"worksFor": {
+    "@type": "Organization",
+    "name": "{{ member.department.name|escapejs }}"
+  }{% endif %}
+  {% if member.email %},"email": "mailto:{{ member.email|escapejs }}"{% endif %}
+  {% if member.photo %},"image": "{{ request.scheme }}://{{ request.get_host }}{{ member.photo.url }}"{% endif %}
+}
+</script>
+
+<section class="fp-hero">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+    <nav class="fp-breadcrumb" aria-label="Breadcrumb">
+      <a href="{% url 'home' %}">Home</a>
+      <i class="fas fa-chevron-right" aria-hidden="true"></i>
+      <a href="{% url 'faculty' %}">Faculty</a>
+      <i class="fas fa-chevron-right" aria-hidden="true"></i>
+      <span class="text-anywhere" aria-current="page">{{ member.name }}</span>
+    </nav>
+
+    <div class="fp-eyebrow">Faculty Profile</div>
+    <h1 class="fp-hero-title text-anywhere">{{ member.name }}</h1>
+    <p class="fp-hero-role text-anywhere">{{ member.designation }}</p>
+  </div>
+</section>
+
+<section class="fp-page">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+
+    <div class="fp-body">
+
+      <!-- Portrait rail -->
+      <aside class="fp-rail">
+        <div class="fp-portrait-wrap">
+          {% if member.photo %}
+            <img
+              src="{{ member.photo.url }}"
+              alt="Portrait of {{ member.name }}, {{ member.designation }}"
+              class="fp-portrait"
+              loading="lazy"
+              width="360"
+              height="450">
+          {% else %}
+            <div class="fp-portrait fp-portrait-placeholder" role="img" aria-label="No photo available for {{ member.name }}">
+              <i class="fas fa-user-tie" aria-hidden="true"></i>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="fp-identity">
+          <div class="fp-name text-anywhere">{{ member.name }}</div>
+          <div class="fp-role text-anywhere">{{ member.designation }}</div>
+          {% if member.department %}
+            <div class="fp-department text-anywhere">{{ member.department.name }}</div>
+          {% endif %}
+        </div>
+
+        {% if member.email %}
+          <a href="mailto:{{ member.email }}" class="fp-email-btn">
+            <i class="fas fa-envelope" aria-hidden="true"></i>
+            <span class="break-all">{{ member.email }}</span>
+          </a>
+        {% endif %}
+      </aside>
+
+      <!-- Details -->
+      <article class="fp-details">
+
+        {% if member.qualification or member.specialization or member.experience_years or member.office_hours %}
+        <div class="fp-facts">
+          {% if member.qualification %}
+          <div class="fp-fact">
+            <span class="fp-fact-label">Qualification</span>
+            <span class="fp-fact-value text-anywhere">{{ member.qualification }}</span>
+          </div>
+          {% endif %}
+          {% if member.specialization %}
+          <div class="fp-fact">
+            <span class="fp-fact-label">Specialization</span>
+            <span class="fp-fact-value text-anywhere">{{ member.specialization }}</span>
+          </div>
+          {% endif %}
+          {% if member.experience_years %}
+          <div class="fp-fact">
+            <span class="fp-fact-label">Experience</span>
+            <span class="fp-fact-value">{{ member.experience_years }} Years</span>
+          </div>
+          {% endif %}
+          {% if member.office_hours %}
+          <div class="fp-fact">
+            <span class="fp-fact-label">Office Hours</span>
+            <span class="fp-fact-value text-anywhere">{{ member.office_hours }}</span>
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        {% if member.biography %}
+        <div class="fp-bio">
+          <h3 class="fp-bio-title">Biography</h3>
+          <div class="fp-bio-text text-anywhere">{{ member.biography|linebreaks }}</div>
+        </div>
+        {% endif %}
+
+        {% if not member.qualification and not member.specialization and not member.experience_years and not member.office_hours and not member.biography %}
+        <div class="fp-empty">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          Additional details for this faculty member have not been added yet.
+        </div>
+        {% endif %}
+
+      </article>
+
+    </div>
+
+    <div class="fp-back">
+      <a href="{% url 'faculty' %}">
+        <i class="fas fa-arrow-left" aria-hidden="true"></i> Back to Faculty
+      </a>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}
