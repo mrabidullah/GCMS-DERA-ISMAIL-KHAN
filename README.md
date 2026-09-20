@@ -10,10 +10,8 @@ A Django-based website built for Government College of Management Sciences (GCMS
   <img src="https://img.shields.io/badge/status-active-brightgreen" alt="Project status" />
 </p>
 
-<p align="center">
-  <img src="<img width="1890" height="908" alt="image" src="https://github.com/user-attachments/assets/37c0e954-89c9-47b7-90af-7ccac702cbb4" />
-" alt="GCMS Project Preview" width="1200" />
-</p>
+<img width="1890" height="908" alt="image" src="https://github.com/user-attachments/assets/c0da62cd-fe61-4817-99b6-ccc47f7b176c" />
+
 
 > The preview image above is a placeholder — swap it out with an actual screenshot before publishing the repo.
 
