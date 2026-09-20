@@ -11,7 +11,8 @@ A Django-based website built for Government College of Management Sciences (GCMS
 </p>
 
 <p align="center">
-  <img src="docs/images/project-preview.svg" alt="GCMS Project Preview" width="1200" />
+  <img src="<img width="1890" height="908" alt="image" src="https://github.com/user-attachments/assets/37c0e954-89c9-47b7-90af-7ccac702cbb4" />
+" alt="GCMS Project Preview" width="1200" />
 </p>
 
 > The preview image above is a placeholder — swap it out with an actual screenshot before publishing the repo.
