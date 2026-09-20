@@ -13,9 +13,9 @@ A Django-based website built for Government College of Management Sciences (GCMS
 <img width="1890" height="908" alt="image" src="https://github.com/user-attachments/assets/c0da62cd-fe61-4817-99b6-ccc47f7b176c" />
 
 
-> The preview image above is a placeholder — swap it out with an actual screenshot before publishing the repo.
+ The preview image above is a placeholder — swap it out with an actual screenshot before publishing the repo.
 
-**Live demo:** [gcms-example.com](#) *(replace with your actual deployed URL, or remove this line if not yet deployed)*
+
 
 ## What this is
 
@@ -204,7 +204,32 @@ Don't deploy with the dev defaults. Before going live:
 
 ## Screenshots
 
-A placeholder lives at `docs/images/project-preview.svg`. Replace it with an actual screenshot of the running site once you're ready to share the repo publicly.
+<img width="1892" height="886" alt="image" src="https://github.com/user-attachments/assets/e11e7ddd-7b26-4ab2-ada2-127edadac2d3" />
+<img width="752" height="521" alt="image" src="https://github.com/user-attachments/assets/2a77997c-2598-48fc-b7d7-137bef47b975" />
+
+<img width="853" height="772" alt="image" src="https://github.com/user-attachments/assets/60f9bd8f-5803-42f0-89cd-a1c3da39de63" />
+<img width="860" height="857" alt="image" src="https://github.com/user-attachments/assets/efc20ec6-faa3-445b-a764-910e1bc0b325" />
+
+<img width="761" height="630" alt="image" src="https://github.com/user-attachments/assets/26de1fa6-62f2-4847-9d29-7ec229f0603c" />
+<img width="892" height="806" alt="image" src="https://github.com/user-attachments/assets/0a5af8ec-3c30-420b-b999-6620d544fb00" />
+<img width="787" height="592" alt="image" src="https://github.com/user-attachments/assets/8846d8c4-e48f-4c26-8d9e-7c27e3c8d544" />
+<img width="812" height="896" alt="image" src="https://github.com/user-attachments/assets/fcca31a4-d0aa-4925-abe7-07df2736410b" />
+<img width="791" height="693" alt="image" src="https://github.com/user-attachments/assets/8f179ffc-07bb-409c-8059-1e7120d67764" />
+<img width="620" height="880" alt="image" src="https://github.com/user-attachments/assets/1c52283a-6308-44f3-b0b2-ecb4ba11cc36" />
+
+<img width="535" height="683" alt="image" src="https://github.com/user-attachments/assets/22b0d52b-3a3f-4e41-86f0-10358a3ec70c" />
+<img width="1917" height="767" alt="image" src="https://github.com/user-attachments/assets/ce169fa3-ed99-4073-99fa-3eda6743ada3" />
+
+
+<img width="488" height="883" alt="image" src="https://github.com/user-attachments/assets/f6dbd797-ff66-4d63-a4a4-fb1cb7412438" />
+<img width="431" height="737" alt="image" src="https://github.com/user-attachments/assets/7573d2bd-c7fd-42bc-9c47-620c23075a29" />
+<img width="892" height="256" alt="image" src="https://github.com/user-attachments/assets/0390b13a-96d5-4644-8a10-7119b69ed1c4" />
+<img width="362" height="897" alt="image" src="https://github.com/user-attachments/assets/f84a2143-51bd-45d8-ba26-98e5a09fa4c9" />
+<img width="365" height="817" alt="image" src="https://github.com/user-attachments/assets/e304da71-721e-4c69-92dd-5fb607f138a4" />
+<img width="1877" height="788" alt="image" src="https://github.com/user-attachments/assets/39d8216f-38a2-4806-8557-64a027d8f613" />
+
+<img width="841" height="513" alt="image" src="https://github.com/user-attachments/assets/dc10955f-dca1-4803-a71e-5e436f9f282b" />
+
 
 ## Troubleshooting
 
